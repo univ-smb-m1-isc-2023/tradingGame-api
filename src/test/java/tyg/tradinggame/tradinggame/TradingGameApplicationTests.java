@@ -1,4 +1,4 @@
-package java.tyg.tradinggame.tradinggame;
+package tyg.tradinggame.tradinggame;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
