@@ -10,12 +10,11 @@ public class HelloWorldController {
 
     @GetMapping("/")
     public String helloWorld() {
-        return "Hello woorld !";
+        return "Hello woooorld !";
     }
-
 
     @GetMapping("/test")
     public String testWorld() {
-    return "trading game";
-}
+        return "trading game";
+    }
 }
