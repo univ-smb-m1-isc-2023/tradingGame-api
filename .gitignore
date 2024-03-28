@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Sring boot###
+!**/src/main/resources/application.properties
