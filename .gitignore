@@ -34,3 +34,4 @@ build/
 
 ### Sring boot###
 ./src/main/resources/application.properties
+logs/trading-game.log
