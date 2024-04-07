@@ -1,4 +1,4 @@
-package tyg.tradinggame.tradinggame;
+package tyg.tradinggame.tradinggame.tools.data;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,9 +14,8 @@ public class AlphaVantageApiClient {
         String symbol = "AAPL"; // Example symbol (Apple Inc.)
         String function = "TIME_SERIES_DAILY"; // Example function (Daily Time Series)
 
-        String apiUrl = "https://www.alphavantage.co/query?function=" + function + "&symbol=" + symbol + "&apikey=" + API_KEY + "&outputsize=compact";
-
-
+        String apiUrl = "https://www.alphavantage.co/query?function=" + function + "&symbol=" + symbol + "&apikey="
+                + API_KEY + "&outputsize=compact";
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);

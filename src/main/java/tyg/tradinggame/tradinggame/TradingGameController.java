@@ -10,25 +10,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
-public class HelloWorldController {
+public class TradingGameController {
 
     private final UserRepositoryService userService;
 
-    public HelloWorldController(UserRepositoryService userService) {
+    public TradingGameController(UserRepositoryService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/")
     public String helloWorld() {
-        return "Hello woorldo !";
+        return "Hello world!";
     }
-
-
-    @GetMapping("/test")
-    public String testWorld() {
-    return "trading game";
-}
-
 
     @GetMapping("/create")
     public void create() {
@@ -40,4 +33,3 @@ public class HelloWorldController {
         return userService.users();
     }
 }
-
