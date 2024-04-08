@@ -24,8 +24,8 @@ public class TradingGameController {
     }
 
     @GetMapping("/create")
-    public void create() {
-        userService.create("enzo");
+    public UserGame create() {
+        return userService.create("enzo");
     }
 
     @GetMapping("/show")

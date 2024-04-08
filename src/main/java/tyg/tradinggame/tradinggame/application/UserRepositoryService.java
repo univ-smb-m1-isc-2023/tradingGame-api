@@ -2,6 +2,7 @@ package tyg.tradinggame.tradinggame.application;
 
 import tyg.tradinggame.tradinggame.infrastructure.persistence.UserGame;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +25,12 @@ public class UserRepositoryService {
         Optional<UserGame> fact = userRepository.findById(factId);
         fact.ifPresent(userRepository::delete);
     }
-    public void create(String name) {
+
+    public UserGame create(String name) {
         // FIXME : check if not already present
         UserGame u = new UserGame(name);
         userRepository.save(u);
+        return u;
     }
 
 }
