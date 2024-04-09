@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class AlphaVantageApiClient {
 
@@ -29,7 +31,8 @@ public class AlphaVantageApiClient {
 
     private static final String API_KEY = "C47GFDHKNBMVKNLL";
 
-    public void fetchData(String symbol) {
+    @PostConstruct
+    public void fetchData() {
         // String symbol = "AAPL"; // Example symbol (Apple Inc.)
         String function = "TIME_SERIES_DAILY"; // Example function (Daily Time Series)
 

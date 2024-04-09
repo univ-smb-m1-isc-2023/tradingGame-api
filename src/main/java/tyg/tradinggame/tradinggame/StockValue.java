@@ -1,7 +1,8 @@
 package tyg.tradinggame.tradinggame;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,8 +24,8 @@ public class StockValue {
     private String lastRefreshed;
     private String outputSize;
     private String timeZone;
-    @OneToMany(mappedBy = "stockValue")
-    private List<DailyData> dailyData;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "stockValue")
+    private List<DailyData> dailyData = new ArrayList<>();
 
     public StockValue(String information, String symbol, String lastRefreshed, String outputSize, String timeZone) {
         this.information = information;

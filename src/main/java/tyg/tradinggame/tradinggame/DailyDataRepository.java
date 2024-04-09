@@ -1,7 +1,10 @@
+
 package tyg.tradinggame.tradinggame;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DailyDataRepository extends CrudRepository<DailyData, Long> {
+@Repository
+public interface DailyDataRepository extends JpaRepository<DailyData, Long> {
 
 }
