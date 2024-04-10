@@ -53,6 +53,7 @@ public class TradingGameController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("deployment_time", formattedDeploymentTime);
+        response.put("time_format", "dd-MM-yyyy HH:mm:ss");
         response.put("elapsed_time",
                 String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds));
 
