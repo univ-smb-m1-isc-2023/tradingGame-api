@@ -43,17 +43,6 @@ public class DailyStockData {
     public DailyStockData() {
     }
 
-    public DailyStockData(String open, String high, String low, String close, String volume, String date,
-            StockValue stockValue) {
-        this.open = Double.parseDouble(open);
-        this.high = Double.parseDouble(high);
-        this.low = Double.parseDouble(low);
-        this.close = Double.parseDouble(close);
-        this.volume = Double.parseDouble(volume);
-        this.date = LocalDate.parse(date); // yyyy-MM-dd
-        this.stockValue = stockValue;
-    }
-
     public double getOpen() {
         return open;
     }

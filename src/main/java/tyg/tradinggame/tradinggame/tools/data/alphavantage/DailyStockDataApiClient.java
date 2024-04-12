@@ -1,8 +1,8 @@
 package tyg.tradinggame.tradinggame.tools.data.alphavantage;
 
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValueRepository;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.DailyStockDataRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
+import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.DailyStockData;
 
 import java.time.LocalDate;
@@ -26,25 +26,46 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class AlphaVantageApiClient {
+public class DailyStockDataApiClient {
 
     @Autowired
-    StockValueRepository stockValueRepository;
+    StockValueRepositoryService stockValueRepositoryService;
 
     @Autowired
-    DailyStockDataRepository dailyStockDataRepository;
+    DailyStockDataRepositoryService dailyStockDataRepositoryService;
 
     private static final String API_KEY = "C47GFDHKNBMVKNLL";
+
+    private StockValueRepositoryService.StockValueDTO createStockValueModel(Map<String, String> metaData) {
+        return new StockValueRepositoryService.StockValueDTO(
+                metaData.get("1. Information"),
+                metaData.get("2. Symbol"),
+                metaData.get("3. Last Refreshed"),
+                metaData.get("4. Output Size"),
+                metaData.get("5. Time Zone"));
+    }
+
+    private DailyStockDataRepositoryService.DailyStockDataDTO createDailyStockDataModel(
+            Map<String, String> dailyStockDataMap, StockValue stockValue) {
+        return new DailyStockDataRepositoryService.DailyStockDataDTO(
+                Double.parseDouble(dailyStockDataMap.get("1. open")),
+                Double.parseDouble(dailyStockDataMap.get("2. high")),
+                Double.parseDouble(dailyStockDataMap.get("3. low")),
+                Double.parseDouble(dailyStockDataMap.get("4. close")),
+                Double.parseDouble(dailyStockDataMap.get("5. volume")),
+                LocalDate.parse(dailyStockDataMap.get("date")),
+                stockValue);
+    }
 
     // @PostConstruct
     public void fetchData(String symbol) {
         // String symbol = "AAPL"; // Example symbol (Apple Inc.)
         String function = "TIME_SERIES_DAILY"; // Example function (Daily Time Series)
 
-        // String apiUrl = "http://localhost:8181/";
-        String apiUrl = "https://www.alphavantage.co/query?function=" + function +
-                "&symbol=" + symbol + "&apikey="
-                + API_KEY + "&outputsize=compact";
+        String apiUrl = "http://localhost:8181/";
+        // String apiUrl = "https://www.alphavantage.co/query?function=" + function +
+        // "&symbol=" + symbol + "&apikey="
+        // + API_KEY + "&outputsize=full";
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -89,27 +110,15 @@ public class AlphaVantageApiClient {
                 timeSeriesData.put(date, dailyStockDataMap);
             });
 
-            StockValue stockValue = new StockValue(
-                    metaData.get("1. Information"),
-                    metaData.get("2. Symbol"),
-                    metaData.get("3. Last Refreshed"),
-                    metaData.get("4. Output Size"),
-                    metaData.get("5. Time Zone"));
-            stockValueRepository.save(stockValue);
+            StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(
+                    createStockValueModel(metaData));
 
             for (Map.Entry<String, Map<String, String>> entry : timeSeriesData.entrySet()) {
                 Map<String, String> dailyStockDataMap = entry.getValue();
 
-                DailyStockData dailyStockData = new DailyStockData(
-                        dailyStockDataMap.get("1. open"),
-                        dailyStockDataMap.get("2. high"),
-                        dailyStockDataMap.get("3. low"),
-                        dailyStockDataMap.get("4. close"),
-                        dailyStockDataMap.get("5. volume"),
-                        dailyStockDataMap.get("date"),
-                        stockValue);
-                stockValue.getDailyStockData().add(dailyStockData);
-                dailyStockDataRepository.save(dailyStockData);
+                dailyStockDataRepositoryService.createIfNotExist(
+                        createDailyStockDataModel(dailyStockDataMap, stockValue));
+
             }
 
             System.out.println("Parsed StockValue: " + responseBody);
