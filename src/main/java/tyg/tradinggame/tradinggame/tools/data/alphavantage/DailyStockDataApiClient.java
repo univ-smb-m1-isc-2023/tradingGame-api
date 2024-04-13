@@ -62,10 +62,10 @@ public class DailyStockDataApiClient {
         // String symbol = "AAPL"; // Example symbol (Apple Inc.)
         String function = "TIME_SERIES_DAILY"; // Example function (Daily Time Series)
 
-        String apiUrl = "http://localhost:8181/";
-        // String apiUrl = "https://www.alphavantage.co/query?function=" + function +
-        // "&symbol=" + symbol + "&apikey="
-        // + API_KEY + "&outputsize=full";
+        // String apiUrl = "http://localhost:8181/";
+        String apiUrl = "https://www.alphavantage.co/query?function=" + function +
+        "&symbol=" + symbol + "&apikey="
+        + API_KEY + "&outputsize=full";
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
