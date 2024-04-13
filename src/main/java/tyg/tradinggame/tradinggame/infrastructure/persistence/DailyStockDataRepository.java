@@ -16,4 +16,6 @@ public interface DailyStockDataRepository extends JpaRepository<DailyStockData, 
 
     DailyStockData findByStockValue_SymbolAndDate(String symbol, LocalDate date);
 
+    void deleteByStockValue_Symbol(String symbol);
+
 }

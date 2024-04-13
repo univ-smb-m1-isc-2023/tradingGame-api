@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,9 +59,27 @@ public class DailyStockDataRepositoryService {
                     dailyStockDataDTO.date,
                     dailyStockDataDTO.stockValue);
             dailyStockDataRepository.save(dailyStockData);
-            dailyStockDataDTO.stockValue.getDailyStockData().add(dailyStockData);
             return dailyStockData;
         }
+    }
+
+    public void forceWriteStockData(List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTOList,
+            StockValue stockValue) {
+        dailyStockDataRepository.deleteByStockValue_Symbol(stockValue.getSymbol());
+        List<DailyStockData> dailyStockDataList = new ArrayList<>();
+        for (DailyStockDataBasicAttributesDTO dailyStockDataBasicAttributesDTO : dailyStockDataBasicAttributesDTOList) {
+            DailyStockData dailyStockData = new DailyStockData(
+                    dailyStockDataBasicAttributesDTO.open,
+                    dailyStockDataBasicAttributesDTO.high,
+                    dailyStockDataBasicAttributesDTO.low,
+                    dailyStockDataBasicAttributesDTO.close,
+                    dailyStockDataBasicAttributesDTO.volume,
+                    dailyStockDataBasicAttributesDTO.date,
+                    stockValue);
+            dailyStockDataList.add(dailyStockData);
+        }
+        dailyStockDataRepository.saveAll(dailyStockDataList);
+        stockValue.setDailyStockData(dailyStockDataList);
     }
 
     public void validateDatePeriod(String startDate, String endDate) {
@@ -76,6 +95,15 @@ public class DailyStockDataRepositoryService {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Please use the format yyyy-MM-dd.", e);
         }
+    }
+
+    public record DailyStockDataBasicAttributesDTO(
+            double open,
+            double high,
+            double low,
+            double close,
+            double volume,
+            LocalDate date) {
     }
 
     public record DailyStockDataDTO(

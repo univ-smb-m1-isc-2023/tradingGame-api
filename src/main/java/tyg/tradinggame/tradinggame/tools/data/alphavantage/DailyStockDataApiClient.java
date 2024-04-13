@@ -2,10 +2,13 @@ package tyg.tradinggame.tradinggame.tools.data.alphavantage;
 
 import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
 import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO;
 import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -92,12 +95,16 @@ public class DailyStockDataApiClient {
             StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(
                     ResponseParser.toStockValueModel(metaData));
 
+            List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTO = new ArrayList<>();
+
             for (Map.Entry<String, Map<String, String>> entry : timeSeriesData.entrySet()) {
                 Map<String, String> dailyStockDataMap = entry.getValue();
 
-                dailyStockDataRepositoryService.createIfNotExist(
-                        ResponseParser.toDailyStockDataModel(dailyStockDataMap, stockValue));
+                dailyStockDataBasicAttributesDTO.add(
+                        ResponseParser.toDailyStockDataBasicAttributesModel(dailyStockDataMap));
             }
+
+            dailyStockDataRepositoryService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
 
             System.out.println("Parsed StockValue: " + responseBody);
         } else {
