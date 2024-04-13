@@ -4,8 +4,10 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
 import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
 import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO;
 import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
+import tyg.tradinggame.tradinggame.application.StockValueRepositoryService.StockValueDTO;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,34 +77,14 @@ public class DailyStockDataApiClient {
 
             JSONObject jsonObject = new JSONObject(responseBodyJson);
 
-            Map<String, String> metaData = new HashMap<>();
-            JSONObject metaDataJson = jsonObject.getJSONObject("Meta Data");
-            metaDataJson.keys().forEachRemaining(key -> metaData.put(key,
-                    metaDataJson.getString(key)));
+            JSONObject metaData = jsonObject.getJSONObject("Meta Data");
+            StockValueDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
 
-            Map<String, Map<String, String>> timeSeriesData = new HashMap<>();
-            JSONObject timeSeriesDataJson = jsonObject.getJSONObject("Time Series (Daily)");
+            StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(stockValueDTO);
 
-            timeSeriesDataJson.keys().forEachRemaining(date -> {
-                JSONObject dailyStockDataJson = timeSeriesDataJson.getJSONObject(date);
-                Map<String, String> dailyStockDataMap = new HashMap<>();
-                dailyStockDataJson.keys().forEachRemaining(key -> dailyStockDataMap.put(key,
-                        dailyStockDataJson.getString(key)));
-                dailyStockDataMap.put("date", date);
-                timeSeriesData.put(date, dailyStockDataMap);
-            });
-
-            StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(
-                    ResponseParser.toStockValueModel(metaData));
-
-            List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTO = new ArrayList<>();
-
-            for (Map.Entry<String, Map<String, String>> entry : timeSeriesData.entrySet()) {
-                Map<String, String> dailyStockDataMap = entry.getValue();
-
-                dailyStockDataBasicAttributesDTO.add(
-                        ResponseParser.toDailyStockDataBasicAttributesModel(dailyStockDataMap));
-            }
+            JSONObject timeSeries = jsonObject.getJSONObject("Time Series (Daily)");
+            List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTO = ResponseParser
+                    .toDailyStockDataModelList(timeSeries);
 
             dailyStockDataRepositoryService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
 

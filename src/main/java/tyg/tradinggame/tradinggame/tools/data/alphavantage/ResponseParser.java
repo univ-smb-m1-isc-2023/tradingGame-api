@@ -1,47 +1,44 @@
 package tyg.tradinggame.tradinggame.tools.data.alphavantage;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
+import org.json.JSONObject;
+
 import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO;
-import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
+
+import tyg.tradinggame.tradinggame.application.StockValueRepositoryService.StockValueDTO;
 
 public class ResponseParser {
 
-    static protected StockValueRepositoryService.StockValueDTO toStockValueModel(Map<String, String> metaData) {
-        return new StockValueRepositoryService.StockValueDTO(
-                metaData.get("1. Information"),
-                metaData.get("2. Symbol"),
-                metaData.get("3. Last Refreshed"),
-                metaData.get("4. Output Size"),
-                metaData.get("5. Time Zone"));
+    static protected StockValueDTO toStockValueModel(JSONObject metaData) {
+        return new StockValueDTO(
+                metaData.getString("1. Information"),
+                metaData.getString("2. Symbol"),
+                metaData.getString("3. Last Refreshed"),
+                metaData.getString("4. Output Size"),
+                metaData.getString("5. Time Zone"));
     }
 
-    static protected DailyStockDataRepositoryService.DailyStockDataDTO toDailyStockDataModel(
-            Map<String, String> dailyStockDataMap, StockValue stockValue) {
-        return new DailyStockDataRepositoryService.DailyStockDataDTO(
-                Double.parseDouble(dailyStockDataMap.get("1. open")),
-                Double.parseDouble(dailyStockDataMap.get("2. high")),
-                Double.parseDouble(dailyStockDataMap.get("3. low")),
-                Double.parseDouble(dailyStockDataMap.get("4. close")),
-                Double.parseDouble(dailyStockDataMap.get("5. volume")),
-                LocalDate.parse(dailyStockDataMap.get("date")),
-                stockValue);
-    }
+    static protected List<DailyStockDataBasicAttributesDTO> toDailyStockDataModelList(JSONObject timeSeries) {
+        List<DailyStockDataBasicAttributesDTO> dailyStockDataList = new ArrayList<>();
 
-    static protected DailyStockDataBasicAttributesDTO toDailyStockDataBasicAttributesModel(
-            Map<String, String> dailyStockDataMap) {
-        return new DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO(
-                Double.parseDouble(dailyStockDataMap.get("1. open")),
-                Double.parseDouble(dailyStockDataMap.get("2. high")),
-                Double.parseDouble(dailyStockDataMap.get("3. low")),
-                Double.parseDouble(dailyStockDataMap.get("4. close")),
-                Double.parseDouble(dailyStockDataMap.get("5. volume")),
-                LocalDate.parse(dailyStockDataMap.get("date")));
+        for (String dateString : timeSeries.keySet()) {
+            LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
+            JSONObject dailyData = timeSeries.getJSONObject(dateString);
+
+            DailyStockDataBasicAttributesDTO dailyStockData = new DailyStockDataBasicAttributesDTO(
+                    dailyData.getDouble("1. open"),
+                    dailyData.getDouble("2. high"),
+                    dailyData.getDouble("3. low"),
+                    dailyData.getDouble("4. close"),
+                    dailyData.getLong("5. volume"),
+                    date);
+            dailyStockDataList.add(dailyStockData);
+        }
+        return dailyStockDataList;
     }
 
 }
