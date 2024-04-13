@@ -6,10 +6,7 @@ import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.D
 import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
 import tyg.tradinggame.tradinggame.application.StockValueRepositoryService.StockValueDTO;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +19,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,18 +36,38 @@ public class DailyStockDataApiClient {
     @Autowired
     DailyStockDataRepositoryService dailyStockDataRepositoryService;
 
-    private static final String API_KEY = "C47GFDHKNBMVKNLL";
+    private static final String function = "TIME_SERIES_DAILY";
+    // private static final String function = "TIME_SERIES_DAILY_ADJUSTED";
+    private static final String metaDataKey = "Meta Data";
+    private static final String dataKey = "Time Series (Daily)";
+
+    private static final List<String> symbols = Arrays.asList("AAPL", "AMZN", "TSLA", "GOOGL", "MSFT", "NFLX", "NVDA",
+            "FB", "SHOP", "BA");
+
+    private static final List<String> demo_symbols = Arrays.asList("IBM", "TSCO.LON", "SHOP.TRT", "GPV.TRV", "MBG.DEX",
+            "RELIANCE.BSE");
+
+    @Value("${data.dailystock.api.domain}")
+    private String apiDomain;
+
+    @Value("${data.dailystock.api.key}")
+    private String API_KEY;
+
+    public DailyStockDataApiClient(String apiDomain) {
+        this.apiDomain = apiDomain;
+    }
+
+    public DailyStockDataApiClient() {
+    }
 
     // @PostConstruct
     public void fetchData(String symbol) {
-        // String symbol = "AAPL"; // Example symbol (Apple Inc.)
-        String function = "TIME_SERIES_DAILY";
-        // String function = "TIME_SERIES_DAILY_ADJUSTED";
 
-        // String apiUrl = "http://localhost:8181/";
-        String apiUrl = "https://www.alphavantage.co/query?function=" + function +
-                "&symbol=" + symbol + "&apikey="
-                + API_KEY + "&outputsize=full";
+        String apiUrl = this.apiDomain + "/query?function=" + function +
+                "&symbol=" + symbol + "&outputsize=full" + "&apikey="
+                + API_KEY;
+
+        System.err.println("Fetching data from: " + apiUrl);
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -65,6 +83,7 @@ public class DailyStockDataApiClient {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Map<String, Object> responseBody = response.getBody();
+
             ObjectMapper objectMapper = new ObjectMapper();
             String responseBodyJson;
             try {
@@ -77,12 +96,12 @@ public class DailyStockDataApiClient {
 
             JSONObject jsonObject = new JSONObject(responseBodyJson);
 
-            JSONObject metaData = jsonObject.getJSONObject("Meta Data");
+            JSONObject metaData = jsonObject.getJSONObject(metaDataKey);
             StockValueDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
 
             StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(stockValueDTO);
 
-            JSONObject timeSeries = jsonObject.getJSONObject("Time Series (Daily)");
+            JSONObject timeSeries = jsonObject.getJSONObject(dataKey);
             List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTO = ResponseParser
                     .toDailyStockDataModelList(timeSeries);
 
