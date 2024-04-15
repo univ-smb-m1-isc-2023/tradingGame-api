@@ -35,13 +35,13 @@ public class GameRepositoryService {
         this.dailyStockDataRepositoryService = dailyStockDataRepositoryService;
     }
 
-    @PostConstruct
-    public void runGames() {
-        List<Game> games = gameRepository.findUnfinshedGames();
-        for (Game game : games) {
-            new GameLogic(this, game).run();
-        }
-    }
+    // @PostConstruct
+    // public void runGames() {
+    // List<Game> games = gameRepository.findUnfinshedGames();
+    // for (Game game : games) {
+    // new GameLogic(this, game).run();
+    // }
+    // }
 
     // CRUD
 
