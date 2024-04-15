@@ -1,4 +1,4 @@
-package tyg.tradinggame.tradinggame.infrastructure.persistence;
+package tyg.tradinggame.tradinggame.infrastructure.persistence.stock;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

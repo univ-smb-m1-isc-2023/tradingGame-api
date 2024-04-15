@@ -1,4 +1,4 @@
-package tyg.tradinggame.tradinggame.infrastructure.persistence;
+package tyg.tradinggame.tradinggame.infrastructure.persistence.stock;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

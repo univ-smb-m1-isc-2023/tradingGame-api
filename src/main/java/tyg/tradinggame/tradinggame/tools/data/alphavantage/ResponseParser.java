@@ -7,14 +7,13 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO;
-
-import tyg.tradinggame.tradinggame.application.StockValueRepositoryService.StockValueDTO;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService.DailyStockDataBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService.StockValueInDTO;
 
 public class ResponseParser {
 
-    static protected StockValueDTO toStockValueModel(JSONObject metaData) {
-        return new StockValueDTO(
+    static protected StockValueInDTO toStockValueModel(JSONObject metaData) {
+        return new StockValueInDTO(
                 metaData.getString("1. Information"),
                 metaData.getString("2. Symbol"),
                 metaData.getString("3. Last Refreshed"),
@@ -22,14 +21,14 @@ public class ResponseParser {
                 metaData.getString("5. Time Zone"));
     }
 
-    static protected List<DailyStockDataBasicAttributesDTO> toDailyStockDataModelList(JSONObject timeSeries) {
-        List<DailyStockDataBasicAttributesDTO> dailyStockDataList = new ArrayList<>();
+    static protected List<DailyStockDataBasicAttributesInDTO> toDailyStockDataModelList(JSONObject timeSeries) {
+        List<DailyStockDataBasicAttributesInDTO> dailyStockDataList = new ArrayList<>();
 
         for (String dateString : timeSeries.keySet()) {
             LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
             JSONObject dailyData = timeSeries.getJSONObject(dateString);
 
-            DailyStockDataBasicAttributesDTO dailyStockData = new DailyStockDataBasicAttributesDTO(
+            DailyStockDataBasicAttributesInDTO dailyStockData = new DailyStockDataBasicAttributesInDTO(
                     dailyData.getDouble("1. open"),
                     dailyData.getDouble("2. high"),
                     dailyData.getDouble("3. low"),

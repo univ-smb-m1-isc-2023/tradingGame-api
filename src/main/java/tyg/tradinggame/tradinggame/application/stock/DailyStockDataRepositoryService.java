@@ -1,10 +1,11 @@
-package tyg.tradinggame.tradinggame.application;
-
-import tyg.tradinggame.tradinggame.infrastructure.persistence.DailyStockData;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.DailyStockDataRepository;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
+package tyg.tradinggame.tradinggame.application.stock;
 
 import org.springframework.stereotype.Service;
+
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDataRepository;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
+
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
@@ -42,7 +43,7 @@ public class DailyStockDataRepositoryService {
                 sort);
     }
 
-    public DailyStockData createIfNotExist(DailyStockDataDTO dailyStockDataDTO) {
+    public DailyStockData createIfNotExist(DailyStockDataInDTO dailyStockDataDTO) {
 
         DailyStockData existingDailyStockData = dailyStockDataRepository.findByStockValue_SymbolAndDate(
                 dailyStockDataDTO.stockValue.getSymbol(),
@@ -63,11 +64,11 @@ public class DailyStockDataRepositoryService {
         }
     }
 
-    public void forceWriteStockData(List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTOList,
+    public void forceWriteStockData(List<DailyStockDataBasicAttributesInDTO> dailyStockDataBasicAttributesDTOList,
             StockValue stockValue) {
         dailyStockDataRepository.deleteByStockValue_Symbol(stockValue.getSymbol());
         List<DailyStockData> dailyStockDataList = new ArrayList<>();
-        for (DailyStockDataBasicAttributesDTO dailyStockDataBasicAttributesDTO : dailyStockDataBasicAttributesDTOList) {
+        for (DailyStockDataBasicAttributesInDTO dailyStockDataBasicAttributesDTO : dailyStockDataBasicAttributesDTOList) {
             DailyStockData dailyStockData = new DailyStockData(
                     dailyStockDataBasicAttributesDTO.open,
                     dailyStockDataBasicAttributesDTO.high,
@@ -97,7 +98,15 @@ public class DailyStockDataRepositoryService {
         }
     }
 
-    public record DailyStockDataBasicAttributesDTO(
+    public List<LocalDate> findDistinctDatesBetween(LocalDate startDate, LocalDate endDate) {
+        return dailyStockDataRepository.findDistinctDatesBetween(startDate, endDate);
+    }
+
+    public Long countDistinctDatesBetween(LocalDate startDate, LocalDate endDate) {
+        return dailyStockDataRepository.countDistinctDatesBetween(startDate, endDate);
+    }
+
+    public record DailyStockDataBasicAttributesInDTO(
             double open,
             double high,
             double low,
@@ -106,7 +115,7 @@ public class DailyStockDataRepositoryService {
             LocalDate date) {
     }
 
-    public record DailyStockDataDTO(
+    public record DailyStockDataInDTO(
             double open,
             double high,
             double low,

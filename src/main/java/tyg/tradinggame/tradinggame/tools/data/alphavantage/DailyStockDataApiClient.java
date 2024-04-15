@@ -1,10 +1,10 @@
 package tyg.tradinggame.tradinggame.tools.data.alphavantage;
 
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
-import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
-import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService.DailyStockDataBasicAttributesDTO;
-import tyg.tradinggame.tradinggame.application.StockValueRepositoryService;
-import tyg.tradinggame.tradinggame.application.StockValueRepositoryService.StockValueDTO;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService.DailyStockDataBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService.StockValueInDTO;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.annotation.PostConstruct;
+// import jakarta.annotation.PostConstruct;
 
 @Component
 public class DailyStockDataApiClient {
@@ -97,12 +97,12 @@ public class DailyStockDataApiClient {
             JSONObject jsonObject = new JSONObject(responseBodyJson);
 
             JSONObject metaData = jsonObject.getJSONObject(metaDataKey);
-            StockValueDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
+            StockValueInDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
 
             StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(stockValueDTO);
 
             JSONObject timeSeries = jsonObject.getJSONObject(dataKey);
-            List<DailyStockDataBasicAttributesDTO> dailyStockDataBasicAttributesDTO = ResponseParser
+            List<DailyStockDataBasicAttributesInDTO> dailyStockDataBasicAttributesDTO = ResponseParser
                     .toDailyStockDataModelList(timeSeries);
 
             dailyStockDataRepositoryService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);

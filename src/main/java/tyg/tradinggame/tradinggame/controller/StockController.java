@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import tyg.tradinggame.tradinggame.infrastructure.persistence.DailyStockData;
-import tyg.tradinggame.tradinggame.application.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClient;
 
 import java.util.List;

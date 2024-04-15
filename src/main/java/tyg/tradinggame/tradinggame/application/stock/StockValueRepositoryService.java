@@ -1,9 +1,9 @@
-package tyg.tradinggame.tradinggame.application;
+package tyg.tradinggame.tradinggame.application.stock;
 
 import org.springframework.stereotype.Service;
 
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValue;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.StockValueRepository;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValueRepository;
 
 @Service
 public class StockValueRepositoryService {
@@ -14,7 +14,7 @@ public class StockValueRepositoryService {
         this.stockValueRepository = stockValueRepository;
     }
 
-    public StockValue createOrUpdateStockValue(StockValueDTO stackValueDTO) {
+    public StockValue createOrUpdateStockValue(StockValueInDTO stackValueDTO) {
 
         StockValue existingStockValue = stockValueRepository.findBySymbol(stackValueDTO.symbol);
         if (existingStockValue != null) {
@@ -31,7 +31,7 @@ public class StockValueRepositoryService {
         }
     }
 
-    public record StockValueDTO(String information, String symbol, String lastRefreshed, String outputSize,
+    public record StockValueInDTO(String information, String symbol, String lastRefreshed, String outputSize,
             String timeZone) {
     }
 }
