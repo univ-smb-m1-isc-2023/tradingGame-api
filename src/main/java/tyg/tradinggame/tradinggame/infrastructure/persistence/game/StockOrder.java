@@ -25,7 +25,7 @@ public class StockOrder {
     private OrderTypeEnum type;
 
     private double price;
-    private int quantity;
+    private Long quantity;
     private LocalDate creationGameDate;
     private LocalDate expirationGameDate;
 
@@ -39,7 +39,7 @@ public class StockOrder {
     @JsonBackReference
     private StockValue stockValue;
 
-    public StockOrder(OrderTypeEnum type, double price, int quantity, LocalDate expirationDate,
+    public StockOrder(OrderTypeEnum type, double price, Long quantity, LocalDate expirationDate,
             OrderStatusEnum status, Wallet wallet, StockValue stockValue) {
         this.type = type;
         this.price = price;
@@ -75,11 +75,11 @@ public class StockOrder {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
