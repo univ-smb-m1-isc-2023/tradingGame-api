@@ -22,7 +22,7 @@ public class WalletMapper {
         return wallets.stream().map(WalletMapper::toOutDTOForOwner).toList();
     }
 
-    public static WalletOutDTOForAll toOutDTOForPublic(Wallet wallet) {
+    public static WalletOutDTOForAll toOutDTOForAll(Wallet wallet) {
         return new WalletOutDTOForAll(
                 wallet.getOwner().getId(),
                 wallet.getOwner().getUsername(),
@@ -31,7 +31,7 @@ public class WalletMapper {
                 wallet.getLastYearProfit());
     }
 
-    public static List<WalletOutDTOForAll> toOutDTOForPublicList(List<Wallet> wallets) {
-        return wallets.stream().map(WalletMapper::toOutDTOForPublic).toList();
+    public static List<WalletOutDTOForAll> toOutDTOForAllList(List<Wallet> wallets) {
+        return wallets.stream().map(WalletMapper::toOutDTOForAll).toList();
     }
 }

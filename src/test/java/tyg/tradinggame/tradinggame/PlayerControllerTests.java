@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tyg.tradinggame.tradinggame.application.game.GameService.GameInDTO;
-import tyg.tradinggame.tradinggame.application.game.PlayerService.PlayerInDTO;
+import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerInDTO;
 import tyg.tradinggame.tradinggame.controller.PlayerController;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

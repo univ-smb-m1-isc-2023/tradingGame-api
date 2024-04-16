@@ -24,7 +24,7 @@ public class GameMapper {
                 game.getInitialBalance(),
                 game.getMoveDuration(),
                 game.getAdmin().getId(),
-                WalletMapper.toOutDTOForPublicList(game.getWallets()),
+                WalletMapper.toOutDTOForAllList(game.getWallets()),
                 gameComputationService.getTotalDuration(game),
                 gameComputationService.getRemainingDuration(game));
     }

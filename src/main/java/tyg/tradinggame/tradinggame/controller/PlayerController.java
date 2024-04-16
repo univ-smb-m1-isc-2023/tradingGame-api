@@ -56,12 +56,12 @@ public class PlayerController {
 
     @PostMapping("/player/{playerId}/game")
     public ResponseEntity<?> createGame(@PathVariable Long playerId,
-            @RequestBody GameBasicAttributesInDTO gameInDTO) {
+            @RequestBody GameBasicAttributesInDTO gameBasicAttributesInDTO) {
         try {
-            if (playerId != gameInDTO.adminId())
+            if (playerId != gameBasicAttributesInDTO.adminId())
                 return ResponseEntity.badRequest().body("Player id does not match admin id");
-            System.err.println("Creating game with title: " + gameInDTO.title());
-            GameOutDTO game = gameService.createGame(gameInDTO);
+            System.err.println("Creating game with title: " + gameBasicAttributesInDTO.title());
+            GameOutDTO game = gameService.createGame(gameBasicAttributesInDTO);
             return ResponseEntity.ok(game);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

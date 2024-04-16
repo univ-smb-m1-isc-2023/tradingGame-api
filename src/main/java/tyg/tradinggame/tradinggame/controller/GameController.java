@@ -46,10 +46,10 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    public ResponseEntity<?> createGame(@RequestBody GameBasicAttributesInDTO gameInDTO) {
+    public ResponseEntity<?> createGame(@RequestBody GameBasicAttributesInDTO gameBasicAttributesInDTO) {
         try {
-            System.err.println("Creating game with title: " + gameInDTO.title());
-            GameOutDTO game = gameService.createGame(gameInDTO);
+            System.err.println("Creating game with title: " + gameBasicAttributesInDTO.title());
+            GameOutDTO game = gameService.createGame(gameBasicAttributesInDTO);
             return ResponseEntity.ok(game);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
