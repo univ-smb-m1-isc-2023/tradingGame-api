@@ -10,11 +10,11 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.WalletRepository;
 
 @Service
-public class WalletRepositoryService {
+public class WalletService {
 
     private final WalletRepository walletRepository;
 
-    public WalletRepositoryService(WalletRepository walletRepository) {
+    public WalletService(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
     }
 

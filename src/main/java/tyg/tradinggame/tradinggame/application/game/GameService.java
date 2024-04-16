@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
@@ -17,22 +17,22 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTyp
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 
 @Service
-public class GameRepositoryService {
+public class GameService {
 
     private final GameRepository gameRepository;
 
-    private final PlayerRepositoryService playerRepositoryService;
-    private final WalletRepositoryService walletRepositoryService;
-    private final DailyStockDataRepositoryService dailyStockDataRepositoryService;
+    private final PlayerService playerService;
+    private final WalletService walletService;
+    private final DailyStockDataService dailyStockDataService;
 
-    public GameRepositoryService(GameRepository gameRepository,
-            PlayerRepositoryService playerRepositoryService,
-            WalletRepositoryService walletRepositoryService,
-            DailyStockDataRepositoryService dailyStockDataRepositoryService) {
+    public GameService(GameRepository gameRepository,
+            PlayerService playerService,
+            WalletService walletService,
+            DailyStockDataService dailyStockDataService) {
         this.gameRepository = gameRepository;
-        this.playerRepositoryService = playerRepositoryService;
-        this.walletRepositoryService = walletRepositoryService;
-        this.dailyStockDataRepositoryService = dailyStockDataRepositoryService;
+        this.playerService = playerService;
+        this.walletService = walletService;
+        this.dailyStockDataService = dailyStockDataService;
     }
 
     // @PostConstruct
@@ -46,7 +46,7 @@ public class GameRepositoryService {
     // CRUD
 
     public GameOutDTO createGame(GameInDTO gameInDTO) {
-        Player admin = playerRepositoryService.getPlayerById(gameInDTO.adminId());
+        Player admin = playerService.getPlayerById(gameInDTO.adminId());
         Game game = new Game(
                 gameInDTO.title,
                 gameInDTO.type,
@@ -59,8 +59,8 @@ public class GameRepositoryService {
 
         List<Wallet> wallets = new ArrayList<>();
         for (Long playerId : gameInDTO.playerIds) {
-            Player player = playerRepositoryService.getPlayerById(playerId);
-            wallets.add(walletRepositoryService.createWallet(player, game, gameInDTO.initialBalance));
+            Player player = playerService.getPlayerById(playerId);
+            wallets.add(walletService.createWallet(player, game, gameInDTO.initialBalance));
         }
         game.setWallets(wallets);
 
@@ -100,7 +100,7 @@ public class GameRepositoryService {
     public Duration getTotalDuration(Game game) {
         return game.getMoveDuration()
                 .multipliedBy(
-                        dailyStockDataRepositoryService.countDistinctDatesBetween(
+                        dailyStockDataService.countDistinctDatesBetween(
                                 game.getInitialGameDate(),
                                 game.getFinalGameDate()));
     }
@@ -108,13 +108,13 @@ public class GameRepositoryService {
     public Duration getRemainingDuration(Game game) {
         return game.getMoveDuration()
                 .multipliedBy(
-                        dailyStockDataRepositoryService.countDistinctDatesBetween(
+                        dailyStockDataService.countDistinctDatesBetween(
                                 game.getCurrentGameDate(),
                                 game.getFinalGameDate()));
     }
 
     public List<LocalDate> getMoveDates(Game game) {
-        return dailyStockDataRepositoryService.findDistinctDatesBetween(
+        return dailyStockDataService.findDistinctDatesBetween(
                 game.getInitialGameDate(),
                 game.getFinalGameDate());
     }

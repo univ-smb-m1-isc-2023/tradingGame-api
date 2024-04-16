@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import tyg.tradinggame.tradinggame.application.game.GameRepositoryService;
-import tyg.tradinggame.tradinggame.application.game.GameRepositoryService.GameOutDTO;
+import tyg.tradinggame.tradinggame.application.game.GameService;
+import tyg.tradinggame.tradinggame.application.game.GameService.GameOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 
 import java.util.List;
@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class GameController {
-    private final GameRepositoryService gameRepositoryService;
+    private final GameService gameService;
 
-    public GameController(GameRepositoryService gameRepositoryService) {
-        this.gameRepositoryService = gameRepositoryService;
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     @GetMapping("/game")
     public List<GameOutDTO> allGames() {
         System.err.println("Getting all games");
-        return gameRepositoryService.getAll();
+        return gameService.getAll();
     }
 
     @GetMapping("/game/unfinshed")
     public List<GameOutDTO> allUnfinshedGames() {
         System.err.println("Getting all unfinshed games");
-        return gameRepositoryService.getAllUnfinshed();
+        return gameService.getAllUnfinshed();
     }
 
     @GetMapping("/game/{id}")
     public ResponseEntity<?> gameById(@PathVariable Long id) {
         try {
             System.err.println("Getting game with id: " + id);
-            GameOutDTO game = gameRepositoryService.getById(id);
+            GameOutDTO game = gameService.getById(id);
             return ResponseEntity.ok(game);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -46,10 +46,10 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    public ResponseEntity<?> createGame(@RequestBody GameRepositoryService.GameInDTO gameInDTO) {
+    public ResponseEntity<?> createGame(@RequestBody GameService.GameInDTO gameInDTO) {
         try {
             System.err.println("Creating game with title: " + gameInDTO.title());
-            GameOutDTO game = gameRepositoryService.createGame(gameInDTO);
+            GameOutDTO game = gameService.createGame(gameInDTO);
             return ResponseEntity.ok(game);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

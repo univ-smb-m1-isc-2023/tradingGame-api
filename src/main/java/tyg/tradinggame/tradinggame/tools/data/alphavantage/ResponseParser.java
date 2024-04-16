@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService.DailyStockDataBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService.StockValueInDTO;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService.DailyStockDataBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.application.stock.StockValueService.StockValueInDTO;
 
 public class ResponseParser {
 

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClient;
 
@@ -14,29 +14,29 @@ import java.util.List;
 @RestController
 public class StockController {
 
-    private final DailyStockDataRepositoryService dailyStockDataRepositoryService;
+    private final DailyStockDataService dailyStockDataService;
     private final DailyStockDataApiClient dailyStockDataApiClient;
 
-    public StockController(DailyStockDataRepositoryService dailyStockDataRepositoryService,
+    public StockController(DailyStockDataService dailyStockDataService,
             DailyStockDataApiClient dailyStockDataApiClient) {
-        this.dailyStockDataRepositoryService = dailyStockDataRepositoryService;
+        this.dailyStockDataService = dailyStockDataService;
         this.dailyStockDataApiClient = dailyStockDataApiClient;
     }
 
     @GetMapping("/stock")
     public List<DailyStockData> allDailyStockDatas() {
         System.err.println("Getting all stock data");
-        return dailyStockDataRepositoryService.getAll();
+        return dailyStockDataService.getAll();
     }
 
     @GetMapping("/stock/{symbol}")
     public List<DailyStockData> dailyStockDatasBySymbol(@PathVariable String symbol) {
         if ("ALL".equals(symbol)) {
             System.err.println("Getting all stock data");
-            return dailyStockDataRepositoryService.getAll();
+            return dailyStockDataService.getAll();
         } else {
             System.err.println("Getting stock data for symbol: " + symbol);
-            return dailyStockDataRepositoryService.getAllBySymbol(symbol);
+            return dailyStockDataService.getAllBySymbol(symbol);
         }
     }
 
@@ -44,11 +44,11 @@ public class StockController {
     public ResponseEntity<?> dailyStockDatasBySymbolAndDate(@PathVariable String symbol,
             @PathVariable String startDate, @PathVariable String endDate) {
         try {
-            dailyStockDataRepositoryService.validateDatePeriod(startDate, endDate);
+            dailyStockDataService.validateDatePeriod(startDate, endDate);
 
             System.err
                     .println("Getting stock data for symbol: " + symbol + " between " + startDate + " and " + endDate);
-            List<DailyStockData> data = dailyStockDataRepositoryService.getAllBySymbolAndDate(symbol, startDate,
+            List<DailyStockData> data = dailyStockDataService.getAllBySymbolAndDate(symbol, startDate,
                     endDate);
             return ResponseEntity.ok(data);
         } catch (IllegalArgumentException e) {

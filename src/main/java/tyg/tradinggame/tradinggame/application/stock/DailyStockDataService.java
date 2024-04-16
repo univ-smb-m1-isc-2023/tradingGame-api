@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DailyStockDataRepositoryService {
+public class DailyStockDataService {
 
     private final DailyStockDataRepository dailyStockDataRepository;
 
-    public DailyStockDataRepositoryService(DailyStockDataRepository repository) {
+    public DailyStockDataService(DailyStockDataRepository repository) {
         this.dailyStockDataRepository = repository;
     }
 

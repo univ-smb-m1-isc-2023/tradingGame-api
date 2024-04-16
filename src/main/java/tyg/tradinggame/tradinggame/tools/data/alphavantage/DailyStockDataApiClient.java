@@ -1,9 +1,9 @@
 package tyg.tradinggame.tradinggame.tools.data.alphavantage;
 
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService;
-import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService;
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataRepositoryService.DailyStockDataBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.application.stock.StockValueRepositoryService.StockValueInDTO;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
+import tyg.tradinggame.tradinggame.application.stock.StockValueService;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService.DailyStockDataBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.application.stock.StockValueService.StockValueInDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 
 import java.util.Arrays;
@@ -31,10 +31,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DailyStockDataApiClient {
 
     @Autowired
-    StockValueRepositoryService stockValueRepositoryService;
+    StockValueService stockValueService;
 
     @Autowired
-    DailyStockDataRepositoryService dailyStockDataRepositoryService;
+    DailyStockDataService dailyStockDataService;
 
     private static final String function = "TIME_SERIES_DAILY";
     // private static final String function = "TIME_SERIES_DAILY_ADJUSTED";
@@ -99,13 +99,13 @@ public class DailyStockDataApiClient {
             JSONObject metaData = jsonObject.getJSONObject(metaDataKey);
             StockValueInDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
 
-            StockValue stockValue = stockValueRepositoryService.createOrUpdateStockValue(stockValueDTO);
+            StockValue stockValue = stockValueService.createOrUpdateStockValue(stockValueDTO);
 
             JSONObject timeSeries = jsonObject.getJSONObject(dataKey);
             List<DailyStockDataBasicAttributesInDTO> dailyStockDataBasicAttributesDTO = ResponseParser
                     .toDailyStockDataModelList(timeSeries);
 
-            dailyStockDataRepositoryService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
+            dailyStockDataService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
 
             System.out.println("Parsed StockValue: " + responseBody);
         } else {

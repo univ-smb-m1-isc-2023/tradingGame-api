@@ -6,11 +6,11 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValueRepository;
 
 @Service
-public class StockValueRepositoryService {
+public class StockValueService {
 
     private final StockValueRepository stockValueRepository;
 
-    public StockValueRepositoryService(StockValueRepository stockValueRepository) {
+    public StockValueService(StockValueRepository stockValueRepository) {
         this.stockValueRepository = stockValueRepository;
     }
 

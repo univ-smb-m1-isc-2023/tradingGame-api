@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserRepositoryService {
+public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserRepositoryService(UserRepository repository) {
+    public UserService(UserRepository repository) {
         this.userRepository = repository;
     }
 
