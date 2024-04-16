@@ -40,13 +40,13 @@ public class StockOrder {
     private StockValue stockValue;
 
     public StockOrder(OrderTypeEnum type, double price, Long quantity, LocalDate expirationDate,
-            OrderStatusEnum status, Wallet wallet, StockValue stockValue) {
+            Wallet wallet, StockValue stockValue) {
         this.type = type;
         this.price = price;
         this.quantity = quantity;
         this.creationGameDate = wallet.getCurrentGameDate();
         this.expirationGameDate = expirationDate;
-        this.status = status;
+        this.status = OrderStatusEnum.PENDING;
         this.wallet = wallet;
         this.stockValue = stockValue;
     }
