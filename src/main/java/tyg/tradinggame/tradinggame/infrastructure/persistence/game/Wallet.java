@@ -110,4 +110,12 @@ public class Wallet {
         return game.getCurrentGameDate();
     }
 
+    public List<StockOrder> getStockOrders() {
+        return stockOrders;
+    }
+
+    public void setStockOrders(List<StockOrder> stockOrders) {
+        this.stockOrders = stockOrders;
+    }
+
 }
