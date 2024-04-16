@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import tyg.tradinggame.tradinggame.application.game.GameService;
-import tyg.tradinggame.tradinggame.application.game.GameService.GameOutDTO;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
+import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +46,7 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    public ResponseEntity<?> createGame(@RequestBody GameService.GameInDTO gameInDTO) {
+    public ResponseEntity<?> createGame(@RequestBody GameBasicAttributesInDTO gameInDTO) {
         try {
             System.err.println("Creating game with title: " + gameInDTO.title());
             GameOutDTO game = gameService.createGame(gameInDTO);

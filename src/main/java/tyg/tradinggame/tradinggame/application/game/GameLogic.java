@@ -8,17 +8,17 @@ import java.util.concurrent.TimeUnit;
 
 public class GameLogic {
 
-    private final GameService gameService;
+    private final GameComputationService gameComputationService;
     private final Game game;
 
-    public GameLogic(GameService gameService, Game game) {
-        this.gameService = gameService;
+    public GameLogic(GameComputationService gameComputationService, Game game) {
+        this.gameComputationService = gameComputationService;
         this.game = game;
     }
 
     public void run() {
         System.err.println("Running game with id: " + game.getId());
-        List<LocalDate> moveDates = gameService.getMoveDates(game);
+        List<LocalDate> moveDates = gameComputationService.getMoveDates(game);
         for (LocalDate date : moveDates) {
             System.err.println("Running game with date: " + date);
             try {

@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tyg.tradinggame.tradinggame.application.game.GameService;
 import tyg.tradinggame.tradinggame.application.game.PlayerService;
-import tyg.tradinggame.tradinggame.application.game.PlayerService.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerInDTO;
+import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerOutDTO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +48,7 @@ public class PlayerController {
     }
 
     @PostMapping("/player")
-    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerService.PlayerInDTO playerInDTO) {
+    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
         System.err.println("Creating player with username: " + playerInDTO.username());
         PlayerOutDTO player = playerService.createPlayer(playerInDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(player);
@@ -53,12 +56,12 @@ public class PlayerController {
 
     @PostMapping("/player/{playerId}/game")
     public ResponseEntity<?> createGame(@PathVariable Long playerId,
-            @RequestBody GameService.GameInDTO gameInDTO) {
+            @RequestBody GameBasicAttributesInDTO gameInDTO) {
         try {
             if (playerId != gameInDTO.adminId())
                 return ResponseEntity.badRequest().body("Player id does not match admin id");
             System.err.println("Creating game with title: " + gameInDTO.title());
-            GameService.GameOutDTO game = gameService.createGame(gameInDTO);
+            GameOutDTO game = gameService.createGame(gameInDTO);
             return ResponseEntity.ok(game);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

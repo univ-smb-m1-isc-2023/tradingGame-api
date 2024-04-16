@@ -1,18 +1,29 @@
 package tyg.tradinggame.tradinggame.application.exceptions;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.persistence.EntityNotFoundException;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTypeEnum;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderStatusEnum;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    static final List<Class<?>> publicEnums = Arrays.asList(
+            GameTypeEnum.class,
+            OrderStatusEnum.class,
+            OrderTypeEnum.class);
 
     @ExceptionHandler(PublicEntityNotFoundException.class)
     public ResponseEntity<Object> handlePublicEntityNotFoundException(PublicEntityNotFoundException ex) {
@@ -50,6 +61,27 @@ public class GlobalExceptionHandler {
         body.put("timestamp", new Date());
         body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Illegal argument");
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+
+        Class<?> requiredType = ex.getRequiredType();
+        if (requiredType != null && requiredType.isEnum()) {
+            if (publicEnums.contains(requiredType)) {
+                body.put("error",
+                        "Invalid value. Allowed values are: " + Arrays.toString(requiredType.getEnumConstants()));
+            } else {
+                body.put("error", "Invalid value for parameter " + ex.getName());
+            }
+        } else {
+            body.put("error", "Invalid value for parameter " + ex.getName());
+        }
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
