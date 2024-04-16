@@ -2,6 +2,7 @@ package tyg.tradinggame.tradinggame.application.stock;
 
 import org.springframework.stereotype.Service;
 
+import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDataRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
@@ -91,10 +92,10 @@ public class DailyStockDataService {
             LocalDate endLocalDate = LocalDate.parse(endDate, formatter);
 
             if (startLocalDate.isAfter(endLocalDate)) {
-                throw new IllegalArgumentException("Start date must be before end date");
+                throw new PublicIllegalArgumentException("Start date must be before end date");
             }
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Please use the format yyyy-MM-dd.", e);
+            throw new PublicIllegalArgumentException("Invalid date format. Please use the format yyyy-MM-dd.", e);
         }
     }
 

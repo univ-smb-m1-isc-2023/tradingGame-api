@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotBlank;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.PlayerRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
+import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 
@@ -42,12 +44,14 @@ public class PlayerService {
 
     public Player getPlayerById(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Player not found with id " + id));
+                .orElseThrow(() -> new PublicEntityNotFoundException("Player not found with id " + id));
     }
 
     // DTOs
 
-    public record PlayerInDTO(String username, String password) {
+    public record PlayerInDTO(
+            @NotBlank(message = "Username is mandatory") String username,
+            @NotBlank(message = "Password is mandatory") String password) {
     }
 
     public record PlayerOutDTO(String username, Long id, List<Wallet> wallets, List<Game> createdGames) {

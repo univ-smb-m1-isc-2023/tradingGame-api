@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
@@ -22,6 +23,11 @@ public class WalletService {
         Wallet wallet = new Wallet(player, game, initialBalance);
         walletRepository.save(wallet);
         return wallet;
+    }
+
+    public Wallet getWalletById(Long walletId) {
+        return walletRepository.findById(walletId)
+                .orElseThrow(() -> new PublicEntityNotFoundException("Wallet not found with id " + walletId));
     }
 
 }

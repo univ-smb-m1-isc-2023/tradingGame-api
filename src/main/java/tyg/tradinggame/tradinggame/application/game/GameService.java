@@ -8,6 +8,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
 import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
@@ -94,7 +98,7 @@ public class GameService {
 
     public Game getGameById(Long id) {
         return gameRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Game not found with id " + id));
+                .orElseThrow(() -> new PublicIllegalArgumentException("Game not found with id " + id));
     }
 
     public Duration getTotalDuration(Game game) {
@@ -122,14 +126,14 @@ public class GameService {
     // DTOs
 
     public record GameInDTO(
-            String title,
-            GameTypeEnum type,
-            LocalDate initialDate,
-            LocalDate finalDate,
-            double initialBalance,
-            Duration moveDuration,
-            Long adminId,
-            List<Long> playerIds) {
+            @NotBlank(message = "Title is mandatory") String title,
+            @NotBlank(message = "Type is mandatory") GameTypeEnum type,
+            @NotNull(message = "Initial date is mandatory") LocalDate initialDate,
+            @NotNull(message = "Final date is mandatory") LocalDate finalDate,
+            @NotNull(message = "Initial balance is mandatory") double initialBalance,
+            @NotNull(message = "Move duration is mandatory") Duration moveDuration,
+            @NotNull(message = "Admin id is mandatory") Long adminId,
+            @NotEmpty(message = "Player ids are mandatory") List<Long> playerIds) {
     }
 
     public record GameOutDTO(

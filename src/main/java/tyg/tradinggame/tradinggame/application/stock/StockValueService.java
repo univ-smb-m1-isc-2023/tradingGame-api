@@ -2,6 +2,8 @@ package tyg.tradinggame.tradinggame.application.stock;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValueRepository;
 
@@ -33,5 +35,10 @@ public class StockValueService {
 
     public record StockValueInDTO(String information, String symbol, String lastRefreshed, String outputSize,
             String timeZone) {
+    }
+
+    public StockValue getStockValueById(Long stockValueId) {
+        return stockValueRepository.findById(stockValueId)
+                .orElseThrow(() -> new PublicEntityNotFoundException("StockValue not found with id " + stockValueId));
     }
 }
