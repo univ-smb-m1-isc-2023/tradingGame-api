@@ -23,6 +23,7 @@ public class Wallet {
 
     @ManyToOne
     @JsonBackReference
+    @JoinColumn(nullable = false)
     private Player owner;
 
     @ManyToOne
@@ -30,8 +31,13 @@ public class Wallet {
     @JoinColumn(nullable = false)
     private Game game;
 
+    @Column(nullable = false)
     private double balance;
+
+    @Column(nullable = false)
     private double lastMonthProfit;
+
+    @Column(nullable = false)
     private double lastYearProfit;
 
     public Wallet(Player owner, Game game, double balance) {
