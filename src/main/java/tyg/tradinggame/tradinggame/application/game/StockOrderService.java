@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import tyg.tradinggame.tradinggame.application.stock.StockValueService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.OrderRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
@@ -61,12 +61,12 @@ public class StockOrderService {
     }
 
     public static record StockOrderInDTO(
-            @NotBlank(message = "Order Type is mandatory") OrderTypeEnum type,
-            @NotBlank(message = "Price is mandatory") double price,
-            @NotBlank(message = "Quantity is mandatory") Long quantity,
-            @NotBlank(message = "The order expiration date is mandatory") LocalDate expirationGameDate,
-            @NotBlank(message = "The wallet id is mandatory") Long walletId,
-            @NotBlank(message = "The stock value id is mandatory") Long stockValueId) {
+            @NotNull(message = "Order Type is mandatory") OrderTypeEnum type,
+            @NotNull(message = "Price is mandatory") double price,
+            @NotNull(message = "Quantity is mandatory") Long quantity,
+            @NotNull(message = "The order expiration date is mandatory") LocalDate expirationGameDate,
+            @NotNull(message = "The wallet id is mandatory") Long walletId,
+            @NotNull(message = "The stock value id is mandatory") Long stockValueId) {
     }
 
     public static record StockOrderOutDTO(
