@@ -3,7 +3,7 @@ package tyg.tradinggame.tradinggame.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tyg.tradinggame.tradinggame.application.UserRepositoryService;
+import tyg.tradinggame.tradinggame.application.UserService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.UserGame;
 
 import java.time.Duration;
@@ -17,10 +17,10 @@ import java.util.Map;
 @RequestMapping("/")
 public class TradingGameController {
 
-    private final UserRepositoryService userService;
+    private final UserService userService;
     private static final LocalDateTime DEPLOYMENT_TIME = LocalDateTime.now();
 
-    public TradingGameController(UserRepositoryService userService) {
+    public TradingGameController(UserService userService) {
         this.userService = userService;
     }
 
