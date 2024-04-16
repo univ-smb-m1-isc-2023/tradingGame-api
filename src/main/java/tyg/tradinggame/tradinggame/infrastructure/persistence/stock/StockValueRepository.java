@@ -1,8 +1,8 @@
 package tyg.tradinggame.tradinggame.infrastructure.persistence.stock;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StockValueRepository extends CrudRepository<StockValue, Long> {
+public interface StockValueRepository extends JpaRepository<StockValue, Long> {
     StockValue findBySymbol(String symbol);
 
 }
