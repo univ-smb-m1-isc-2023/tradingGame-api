@@ -9,8 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -30,6 +33,10 @@ public class Wallet {
     @JsonBackReference
     @JoinColumn(nullable = false)
     private Game game;
+
+    @OneToMany(mappedBy = "wallet")
+    @JsonBackReference
+    private List<StockOrder> stockOrders = new ArrayList<>();
 
     @Column(nullable = false)
     private double balance;
