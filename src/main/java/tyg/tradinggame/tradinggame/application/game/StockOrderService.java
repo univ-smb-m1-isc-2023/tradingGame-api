@@ -18,4 +18,8 @@ public class StockOrderService {
         this.orderRepository = orderRepository;
     }
 
+    public StockOrder save(StockOrder stockOrder) {
+        return orderRepository.save(stockOrder);
+    }
+
 }

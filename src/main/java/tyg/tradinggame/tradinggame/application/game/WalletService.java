@@ -8,6 +8,7 @@ import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundEx
 import tyg.tradinggame.tradinggame.application.stock.StockValueService;
 import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderInDTO;
+import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForAll;
 import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForOwner;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
@@ -16,6 +17,7 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.WalletRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
+import tyg.tradinggame.tradinggame.mappers.game.StockOrderMapper;
 import tyg.tradinggame.tradinggame.mappers.game.WalletMapper;
 
 @Service
@@ -39,7 +41,7 @@ public class WalletService {
         return wallet;
     }
 
-    public StockOrder createStockOrder(StockOrderBasicAttributesInDTO stockOrderInDTO) {
+    public WalletOutDTOForOwner createStockOrder(StockOrderBasicAttributesInDTO stockOrderInDTO) {
         Wallet wallet = getWalletById(stockOrderInDTO.walletId());
         StockValue stockValue = stockValueService.getStockValueById(stockOrderInDTO.stockValueId());
         StockOrder stockOrder = new StockOrder(
@@ -49,9 +51,10 @@ public class WalletService {
                 stockOrderInDTO.expirationGameDate(),
                 wallet,
                 stockValue);
+        stockOrderService.save(stockOrder);
         wallet.getStockOrders().add(stockOrder);
-        walletRepository.save(wallet);
-        return stockOrder;
+        wallet = getWalletById(wallet.getId());
+        return WalletMapper.toOutDTOForOwner(wallet);
     }
 
     public Wallet getWalletById(Long walletId) {

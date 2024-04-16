@@ -51,6 +51,9 @@ public class StockOrder {
         this.stockValue = stockValue;
     }
 
+    public StockOrder() {
+    }
+
     public Long getId() {
         return id;
     }

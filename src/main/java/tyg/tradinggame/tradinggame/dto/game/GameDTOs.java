@@ -12,7 +12,7 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTyp
 
 public class GameDTOs {
 
-    public record GameBasicAttributesInDTO(
+    public static record GameBasicAttributesInDTO(
             @NotBlank(message = "Title is mandatory") String title,
             @NotBlank(message = "Type is mandatory") GameTypeEnum type,
             @NotNull(message = "Initial date is mandatory") LocalDate initialDate,
@@ -23,7 +23,7 @@ public class GameDTOs {
             @NotEmpty(message = "Player ids are mandatory") List<Long> playerIds) {
     }
 
-    public record GameOutDTO(
+    public static record GameOutDTO(
             Long id,
             String title,
             GameTypeEnum type,

@@ -3,6 +3,7 @@ package tyg.tradinggame.tradinggame.dto.game;
 import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotNull;
+import tyg.tradinggame.tradinggame.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
@@ -33,6 +34,6 @@ public class StockOrderDTOs {
             Long quantity,
             LocalDate creationGameDate,
             LocalDate expirationGameDate,
-            StockValue stockValue) {
+            StockValueOutDTOForOverview stockValue) {
     }
 }

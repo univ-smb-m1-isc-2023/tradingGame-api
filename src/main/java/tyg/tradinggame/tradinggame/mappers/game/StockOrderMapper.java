@@ -14,7 +14,7 @@ public class StockOrderMapper {
                 stockOrder.getQuantity(),
                 stockOrder.getCreationGameDate(),
                 stockOrder.getExpirationGameDate(),
-                stockOrder.getStockValue());
+                StockValueMapper.toOutDTOForOverview(stockOrder.getStockValue()));
     }
 
     public static List<StockOrderOutDTO> toOutDTOList(List<StockOrder> stockOrders) {
