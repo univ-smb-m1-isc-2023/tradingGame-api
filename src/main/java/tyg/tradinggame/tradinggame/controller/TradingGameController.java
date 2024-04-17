@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "https://tradinggame-web.oups.net")
+@CrossOrigin\(origins = "*"\)
 @RestController
 @RequestMapping("/")
 public class TradingGameController {

@@ -19,7 +19,7 @@ import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerOutDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@CrossOrigin(origins = "https://tradinggame-web.oups.net")
+@CrossOrigin\(origins = "*"\)
 @RestController
 public class PlayerController {
 

@@ -10,7 +10,7 @@ import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderBasicAttrib
 import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForOwner;
 
-@CrossOrigin(origins = "https://tradinggame-web.oups.net")
+@CrossOrigin\(origins = "*"\)
 @RestController
 public class WalletController {
     private final WalletService walletService;
