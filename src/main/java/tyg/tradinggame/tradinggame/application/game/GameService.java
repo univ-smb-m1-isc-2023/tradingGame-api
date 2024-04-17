@@ -1,28 +1,18 @@
 package tyg.tradinggame.tradinggame.application.game;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
-import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTypeEnum;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.mappers.game.GameMapper;
-import tyg.tradinggame.tradinggame.mappers.game.WalletMapper;
 
 @Service
 public class GameService {
@@ -43,32 +33,24 @@ public class GameService {
         this.gameComputationService = gameComputationService;
     }
 
-    // @PostConstruct
-    // public void runGames() {
-    // List<Game> games = gameRepository.findUnfinshedGames();
-    // for (Game game : games) {
-    // new GameLogic(this, game).run();
-    // }
-    // }
-
     // CRUD
 
-    public GameOutDTO createGame(GameBasicAttributesInDTO gameInDTO) {
-        Player admin = playerService.getPlayerById(gameInDTO.adminId());
+    public GameOutDTO createGame(GameBasicAttributesInDTO gameBasicAttributesInDTO) {
+        Player admin = playerService.getPlayerById(gameBasicAttributesInDTO.adminId());
         Game game = new Game(
-                gameInDTO.title(),
-                gameInDTO.type(),
-                gameInDTO.initialDate(),
-                gameInDTO.finalDate(),
-                gameInDTO.initialBalance(),
-                gameInDTO.moveDuration(),
+                gameBasicAttributesInDTO.title(),
+                gameBasicAttributesInDTO.type(),
+                gameBasicAttributesInDTO.initialDate(),
+                gameBasicAttributesInDTO.finalDate(),
+                gameBasicAttributesInDTO.initialBalance(),
+                gameBasicAttributesInDTO.moveDuration(),
                 admin);
         gameRepository.save(game);
 
         List<Wallet> wallets = new ArrayList<>();
-        for (Long playerId : gameInDTO.playerIds()) {
+        for (Long playerId : gameBasicAttributesInDTO.playerIds()) {
             Player player = playerService.getPlayerById(playerId);
-            wallets.add(walletService.createWallet(player, game, gameInDTO.initialBalance()));
+            wallets.add(walletService.createWallet(player, game, gameBasicAttributesInDTO.initialBalance()));
         }
         game.setWallets(wallets);
 
