@@ -1,5 +1,6 @@
 package tyg.tradinggame.tradinggame.application.game.logic;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,47 +18,50 @@ public class GameRunner {
     private final GameLogicService gameLogicService;
     private final Game game;
     private List<StockOrder> stockOrders;
-    private List<LocalDateTime> moveTimes;
+    private List<LocalDateTime> moveScheduleTimes;
     private Map<Long, DailyStockData> currentDailyStockDatas;
+    private List<LocalDate> dates;
 
     public GameRunner(GameLogicService gameLogicService,
             Game game) {
         this.gameLogicService = gameLogicService;
         this.game = game;
         this.initializeMoveTimes();
+        this.dates = new ArrayList<>(gameLogicService.getTotalMoveDates(game));
     }
 
     private void initializeMoveTimes() {
         Long remainingMoves = gameLogicService.getRemainingMoveNumber(game);
-        this.moveTimes = new ArrayList<>();
+        moveScheduleTimes = new ArrayList<>();
         LocalDateTime initialDateTime = LocalDateTime.now();
         for (long i = 0; i < remainingMoves; i++) {
-            this.moveTimes.add(initialDateTime.plus(game.getMoveDuration().multipliedBy(i)));
+            moveScheduleTimes.add(initialDateTime.plus(game.getMoveDuration().multipliedBy(i)));
         }
     }
 
     public void move() {
-        if (this.moveTimes.get(0).isBefore(LocalDateTime.now())) {
-            this.updateStockOrders();
-            this.updateDailyStockDatas();
-            Iterator<StockOrder> iterator = this.stockOrders.iterator();
+        if (moveScheduleTimes.get(0).isBefore(LocalDateTime.now())) {
+            updateStockOrders();
+            updateDailyStockDatas();
+            Iterator<StockOrder> iterator = stockOrders.iterator();
             while (iterator.hasNext()) {
                 StockOrder stockOrder = iterator.next();
-                boolean passed = this.tryToPassStockOrder(stockOrder);
+                boolean passed = tryToPassStockOrder(stockOrder);
                 if (passed) {
+                    stockOrder.setExecuted(true);
                     gameLogicService.updateFromOrder(stockOrder);
                     iterator.remove();
                 }
             }
-            this.moveTimes.remove(0);
+            moveScheduleTimes.remove(0);
+            dates.remove(0);
             System.err.println("Game date: " + game.getCurrentGameDate());
-            gameLogicService.iterateGameDate(game);
+            gameLogicService.setGameDate(game, dates.get(0));
             System.err.println("Game date: " + game.getCurrentGameDate());
         }
     }
 
     public boolean tryToPassStockOrder(StockOrder stockOrder) {
-        System.err.println(currentDailyStockDatas);
         switch (stockOrder.getType()) {
             case OrderTypeEnum.BUY_MARKET:
                 return BuyMarketStockOrderLogic.tryToPassStockOrder(
@@ -100,12 +104,12 @@ public class GameRunner {
         this.stockOrders = stockOrders;
     }
 
-    public List<LocalDateTime> getMoveTimes() {
-        return moveTimes;
+    public List<LocalDateTime> getMoveScheduleTimes() {
+        return moveScheduleTimes;
     }
 
-    public void setMoveTimes(List<LocalDateTime> moveTimes) {
-        this.moveTimes = moveTimes;
+    public void setMoveScheduleTimes(List<LocalDateTime> moveTimes) {
+        this.moveScheduleTimes = moveTimes;
     }
 
 }

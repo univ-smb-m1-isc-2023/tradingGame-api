@@ -83,8 +83,8 @@ public class GameLogicService {
         stockOrderRepository.save(stockOrder);
     }
 
-    public void iterateGameDate(Game game) {
-        game.setCurrentGameDate(game.getCurrentGameDate().plusDays(1));
+    public void setGameDate(Game game, LocalDate newDate) {
+        game.setCurrentGameDate(newDate);
         gameRepository.save(game);
     }
 }

@@ -6,6 +6,9 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDa
 public class SellMarketStockOrderLogic {
 
     public static boolean tryToPassStockOrder(DailyStockData dailyStockData, StockOrder stockOrder) {
+        if (dailyStockData == null) {
+            return false;
+        }
         double price = Utils.randomInRange(dailyStockData.getLow(), dailyStockData.getHigh());
         Utils.addSumToWallet(stockOrder, price);
         return true;

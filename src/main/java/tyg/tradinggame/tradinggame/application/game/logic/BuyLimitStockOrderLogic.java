@@ -6,6 +6,9 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDa
 public class BuyLimitStockOrderLogic {
 
     public static boolean tryToPassStockOrder(DailyStockData dailyStockData, StockOrder stockOrder) {
+        if (dailyStockData == null) {
+            return false;
+        }
         double price = stockOrder.getPrice();
         if (price >= dailyStockData.getLow()) {
             Utils.deduceSumFromWallet(stockOrder, price);
