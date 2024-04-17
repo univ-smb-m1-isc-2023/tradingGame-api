@@ -11,22 +11,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DailyStockDataRepository extends JpaRepository<DailyStockData, Long> {
-    List<DailyStockData> findByStockValue_Symbol(String symbol, Sort sort);
+        List<DailyStockData> findByStockValue_Symbol(String symbol, Sort sort);
 
-    List<DailyStockData> findByStockValue_SymbolAndDateBetween(String symbol, LocalDate startDate, LocalDate endDate,
-            Sort sort);
+        List<DailyStockData> findByStockValue_SymbolAndDateBetween(String symbol, LocalDate startDate,
+                        LocalDate endDate,
+                        Sort sort);
 
-    DailyStockData findByStockValue_SymbolAndDate(String symbol, LocalDate date);
+        DailyStockData findByStockValue_SymbolAndDate(String symbol, LocalDate date);
 
-    void deleteByStockValue_Symbol(String symbol);
+        void deleteByStockValue_Symbol(String symbol);
 
-    Long countByStockValue_SymbolAndDateBetween(String symbol, LocalDate startDate, LocalDate endDate);
+        Long countByStockValue_SymbolAndDateBetween(String symbol, LocalDate startDate, LocalDate endDate);
 
-    @Query("SELECT COUNT(DISTINCT d.date) FROM DailyStockData d WHERE d.date BETWEEN :startDate AND :endDate")
-    Long countDistinctDatesBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+        @Query("SELECT COUNT(DISTINCT d.date) FROM DailyStockData d WHERE d.date BETWEEN :startDate AND :endDate")
+        Long countDistinctDatesBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT DISTINCT d.date FROM DailyStockData d WHERE d.date BETWEEN :startDate AND :endDate ORDER BY d.date ASC")
-    List<LocalDate> findDistinctDatesBetween(
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+        @Query("SELECT DISTINCT d.date FROM DailyStockData d WHERE d.date BETWEEN :startDate AND :endDate ORDER BY d.date ASC")
+        List<LocalDate> findDistinctDatesBetween(@Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
+
+        List<DailyStockData> findByDate(LocalDate date);
 }

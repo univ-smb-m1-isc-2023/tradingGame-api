@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.PostConstruct;
+
 // import jakarta.annotation.PostConstruct;
 
 @Component
@@ -48,22 +50,48 @@ public class DailyStockDataApiClient {
             "RELIANCE.BSE");
 
     @Value("${data.dailystock.api.domain}")
-    private String apiDomain;
+    private String API_DOMAIN;
 
     @Value("${data.dailystock.api.key}")
     private String API_KEY;
 
-    public DailyStockDataApiClient(String apiDomain) {
-        this.apiDomain = apiDomain;
+    public DailyStockDataApiClient(String API_DOMAIN, String API_KEY) {
+        this.API_DOMAIN = API_DOMAIN;
+        this.API_KEY = API_KEY;
     }
 
     public DailyStockDataApiClient() {
     }
 
-    // @PostConstruct
+    @PostConstruct
+    public void populate() {
+        String defualt_api_key = API_KEY;
+        String default_api_domain = API_DOMAIN;
+        this.API_DOMAIN = "https://www.alphavantage.co";
+        this.API_KEY = "demo";
+
+        boolean fetched = false;
+
+        List<String> presentSymbols = stockValueService.getAllStockValues().stream().map(StockValue::getSymbol)
+                .toList();
+        for (String string : demo_symbols) {
+            if (!presentSymbols.contains(string)) {
+                fetchData(string);
+                fetched = true;
+            }
+        }
+
+        if (fetched) {
+            System.out.println("Fetched demo data from AlphaVantage");
+        }
+
+        this.API_DOMAIN = default_api_domain;
+        this.API_KEY = defualt_api_key;
+    }
+
     public void fetchData(String symbol) {
 
-        String apiUrl = this.apiDomain + "/query?function=" + function +
+        String apiUrl = this.API_DOMAIN + "/query?function=" + function +
                 "&symbol=" + symbol + "&outputsize=full" + "&apikey="
                 + API_KEY;
 
@@ -107,7 +135,7 @@ public class DailyStockDataApiClient {
 
             dailyStockDataService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
 
-            System.out.println("Parsed StockValue: " + responseBody);
+            // System.out.println("Parsed StockValue: " + responseBody);
         } else {
             System.err.println("Error: " + response.getStatusCode());
         }

@@ -50,4 +50,8 @@ public class StockValueService {
         List<StockValue> stockValues = stockValueRepository.findAll();
         return stockValues.stream().map(stockValue -> StockValueMapper.toOutDTOForOverview(stockValue)).toList();
     }
+
+    public List<StockValue> getAllStockValues() {
+        return stockValueRepository.findAll();
+    }
 }
