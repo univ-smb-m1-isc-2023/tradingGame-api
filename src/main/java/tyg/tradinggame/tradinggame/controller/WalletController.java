@@ -1,5 +1,6 @@
 package tyg.tradinggame.tradinggame.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderBasicAttrib
 import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForOwner;
 
+@CrossOrigin(origins = "https://tradinggame-web.oups.net")
 @RestController
 public class WalletController {
     private final WalletService walletService;

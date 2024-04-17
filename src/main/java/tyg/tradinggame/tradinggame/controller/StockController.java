@@ -1,6 +1,7 @@
 package tyg.tradinggame.tradinggame.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClie
 
 import java.util.List;
 
+@CrossOrigin(origins = "https://tradinggame-web.oups.net")
 @RestController
 public class StockController {
 
