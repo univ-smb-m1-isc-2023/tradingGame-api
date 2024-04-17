@@ -14,7 +14,7 @@ import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClie
 
 import java.util.List;
 
-@CrossOrigin\(origins = "*"\)
+@CrossOrigin(origins = "*")
 @RestController
 public class StockController {
 
