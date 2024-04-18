@@ -26,12 +26,12 @@ public class PlayerService {
 
     // CRUD
 
-    public PlayerOutDTO createPlayer(PlayerInDTO playerInDTO) {
-        Player player = new Player(playerInDTO.username(), playerInDTO.password());
-        playerRepository.save(player);
+//    public PlayerOutDTO createPlayer(PlayerInDTO playerInDTO) {
+//        Player player = new Player(playerInDTO.username(), playerInDTO.password());
+//        playerRepository.save(player);
 
-        return PlayerMapper.toOutDTO(player, gameComputationService);
-    }
+//        return PlayerMapper.toOutDTO(player, gameComputationService);
+//    }
 
     public List<PlayerOutDTO> getAll() {
         List<Player> players = playerRepository.findAll();

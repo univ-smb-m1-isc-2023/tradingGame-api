@@ -49,12 +49,12 @@ public class PlayerController {
         }
     }
 
-    @PostMapping("/player")
-    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
-        System.err.println("Creating player with username: " + playerInDTO.username());
-        PlayerOutDTO player = playerService.createPlayer(playerInDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(player);
-    }
+//    @PostMapping("/player")
+//    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
+//        System.err.println("Creating player with username: " + playerInDTO.username());
+//        PlayerOutDTO player = playerService.createPlayer(playerInDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(player);
+//    }
 
     @PostMapping("/player/{playerId}/game")
     public ResponseEntity<?> createGame(@PathVariable Long playerId,

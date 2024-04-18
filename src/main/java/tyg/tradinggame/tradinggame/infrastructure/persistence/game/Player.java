@@ -1,5 +1,6 @@
 package tyg.tradinggame.tradinggame.infrastructure.persistence.game;
 
+import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,24 +13,41 @@ import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "player")
-public class Player {
+public class Player implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
+
     @Column(nullable = false)
     private String password;
+
+    // Vous pouvez ajouter d'autres champs selon vos besoins
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "owner")
     @JsonManagedReference
@@ -39,29 +57,49 @@ public class Player {
     @JsonManagedReference
     private List<Game> createdGames = new ArrayList<>();
 
-    public Player(String username, String password) {
-        this.username = username;
-        this.password = password;
+    // Implémentation des méthodes de UserDetails
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Dans cet exemple, nous renvoyons un rôle statique ROLE_USER.
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
-    public Player() {
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @Override
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isAccountNonExpired() {
+        // Vous pouvez implémenter une logique d'expiration du compte ici.
+        return true;
     }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // Vous pouvez implémenter une logique de verrouillage du compte ici.
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // Vous pouvez implémenter une logique d'expiration des informations d'identification ici.
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // Vous pouvez implémenter une logique pour activer ou désactiver le compte ici.
+        return true;
+    }
+
+    // Getters et setters
 
     public List<Wallet> getWallets() {
         return wallets;
@@ -78,13 +116,4 @@ public class Player {
     public void setCreatedGames(List<Game> createdGames) {
         this.createdGames = createdGames;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }
