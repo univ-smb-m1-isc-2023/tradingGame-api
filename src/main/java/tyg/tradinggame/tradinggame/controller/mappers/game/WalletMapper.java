@@ -1,9 +1,9 @@
-package tyg.tradinggame.tradinggame.mappers.game;
+package tyg.tradinggame.tradinggame.controller.mappers.game;
 
 import java.util.List;
 
-import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForAll;
-import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForAll;
+import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 
 public class WalletMapper {

@@ -1,8 +1,8 @@
-package tyg.tradinggame.tradinggame.mappers.game;
+package tyg.tradinggame.tradinggame.controller.mappers.game;
 
 import java.util.List;
 
-import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderStatusEnum;
 

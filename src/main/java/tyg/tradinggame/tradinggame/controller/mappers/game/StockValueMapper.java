@@ -1,6 +1,6 @@
-package tyg.tradinggame.tradinggame.mappers.game;
+package tyg.tradinggame.tradinggame.controller.mappers.game;
 
-import tyg.tradinggame.tradinggame.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 
 public class StockValueMapper {
