@@ -31,7 +31,7 @@ public class GameScheduler {
         gameRunners.add(gameRunner);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    //@Scheduled(fixedDelay = 1000)
     public void run() {
         System.err.println("Running");
         Iterator<GameRunner> iterator = gameRunners.iterator();

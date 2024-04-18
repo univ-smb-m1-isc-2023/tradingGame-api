@@ -79,4 +79,12 @@ public class Player {
         this.createdGames = createdGames;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
