@@ -14,9 +14,12 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValueRe
 public class StockValueService {
 
     private final StockValueRepository stockValueRepository;
+    private final StockValueMapper stockValueMapper;
 
-    public StockValueService(StockValueRepository stockValueRepository) {
+    public StockValueService(StockValueRepository stockValueRepository,
+            StockValueMapper stockValueMapper) {
         this.stockValueRepository = stockValueRepository;
+        this.stockValueMapper = stockValueMapper;
     }
 
     public StockValue createOrUpdateStockValue(StockValueInDTO stackValueDTO) {
@@ -47,7 +50,7 @@ public class StockValueService {
 
     public List<StockValueOutDTOForOverview> getAll() {
         List<StockValue> stockValues = stockValueRepository.findAll();
-        return stockValues.stream().map(stockValue -> StockValueMapper.toOutDTOForOverview(stockValue)).toList();
+        return stockValues.stream().map(stockValue -> stockValueMapper.toOutDTOForOverview(stockValue)).toList();
     }
 
     public List<StockValue> getAllStockValues() {

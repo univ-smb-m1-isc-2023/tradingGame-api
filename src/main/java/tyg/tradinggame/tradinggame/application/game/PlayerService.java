@@ -15,13 +15,13 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
-    private final GameComputationService gameComputationService;
+    private final PlayerMapper playerMapper;
 
     public PlayerService(
             PlayerRepository playerRepository,
-            GameComputationService gameComputationService) {
+            PlayerMapper playerMapper) {
         this.playerRepository = playerRepository;
-        this.gameComputationService = gameComputationService;
+        this.playerMapper = playerMapper;
     }
 
     // CRUD
@@ -30,17 +30,17 @@ public class PlayerService {
         Player player = new Player(playerInDTO.username(), playerInDTO.password());
         playerRepository.save(player);
 
-        return PlayerMapper.toOutDTO(player, gameComputationService);
+        return playerMapper.toOutDTO(player);
     }
 
     public List<PlayerOutDTO> getAll() {
         List<Player> players = playerRepository.findAll();
-        return players.stream().map(game -> PlayerMapper.toOutDTO(game, gameComputationService)).toList();
+        return players.stream().map(game -> playerMapper.toOutDTO(game)).toList();
     }
 
     public PlayerOutDTO getById(Long id) {
         Player player = getPlayerById(id);
-        return PlayerMapper.toOutDTO(player, gameComputationService);
+        return playerMapper.toOutDTO(player);
     }
 
     // Utils

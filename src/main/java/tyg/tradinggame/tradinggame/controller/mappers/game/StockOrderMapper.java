@@ -2,13 +2,22 @@ package tyg.tradinggame.tradinggame.controller.mappers.game;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderStatusEnum;
 
+@Component
 public class StockOrderMapper {
 
-    public static StockOrderOutDTO toOutDTO(StockOrder stockOrder) {
+    private final StockValueMapper stockValueMapper;
+
+    public StockOrderMapper(StockValueMapper stockValueMapper) {
+        this.stockValueMapper = stockValueMapper;
+    }
+
+    public StockOrderOutDTO toOutDTO(StockOrder stockOrder) {
         OrderStatusEnum status;
         if (stockOrder.isCancelled()) {
             status = OrderStatusEnum.CANCELLED;
@@ -26,12 +35,12 @@ public class StockOrderMapper {
                 stockOrder.getQuantity(),
                 stockOrder.getCreationGameDate(),
                 stockOrder.getExpirationGameDate(),
-                StockValueMapper.toOutDTOForOverview(stockOrder.getStockValue()),
+                stockValueMapper.toOutDTOForOverview(stockOrder.getStockValue()),
                 status);
     }
 
-    public static List<StockOrderOutDTO> toOutDTOList(List<StockOrder> stockOrders) {
-        return stockOrders.stream().map(StockOrderMapper::toOutDTO).toList();
+    public List<StockOrderOutDTO> toOutDTOList(List<StockOrder> stockOrders) {
+        return stockOrders.stream().map(this::toOutDTO).toList();
     }
 
 }

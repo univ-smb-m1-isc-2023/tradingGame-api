@@ -21,13 +21,16 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final StockOrderService stockOrderService;
     private final StockValueService stockValueService;
+    private final WalletMapper walletMapper;
 
     public WalletService(WalletRepository walletRepository,
             StockOrderService stockOrderService,
-            StockValueService stockValueService) {
+            StockValueService stockValueService,
+            WalletMapper walletMapper) {
         this.walletRepository = walletRepository;
         this.stockOrderService = stockOrderService;
         this.stockValueService = stockValueService;
+        this.walletMapper = walletMapper;
     }
 
     protected Wallet createWallet(Player player, Game game, double initialBalance) {
@@ -55,7 +58,7 @@ public class WalletService {
         stockOrderService.save(stockOrder);
         wallet.getStockOrders().add(stockOrder);
         wallet = getWalletById(wallet.getId());
-        return WalletMapper.toOutDTOForOwner(wallet);
+        return walletMapper.toOutDTOForOwner(wallet);
     }
 
     public Wallet getWalletById(Long walletId) {
@@ -64,7 +67,7 @@ public class WalletService {
     }
 
     public WalletOutDTOForOwner getById(Long walletId) {
-        return WalletMapper.toOutDTOForOwner(getWalletById(walletId));
+        return walletMapper.toOutDTOForOwner(getWalletById(walletId));
     }
 
 }

@@ -18,19 +18,18 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 public class GameService {
 
     private final GameRepository gameRepository;
-
     private final PlayerService playerService;
     private final WalletService walletService;
-    private final GameComputationService gameComputationService;
+    private final GameMapper gameMapper;
 
     public GameService(GameRepository gameRepository,
             PlayerService playerService,
             WalletService walletService,
-            GameComputationService gameComputationService) {
+            GameMapper gameMapper) {
         this.gameRepository = gameRepository;
         this.playerService = playerService;
         this.walletService = walletService;
-        this.gameComputationService = gameComputationService;
+        this.gameMapper = gameMapper;
     }
 
     // CRUD
@@ -54,14 +53,14 @@ public class GameService {
         }
         game.setWallets(wallets);
 
-        return GameMapper.toOutDTO(game, gameComputationService);
+        return gameMapper.toOutDTO(game);
     }
 
     public List<GameOutDTO> getAll() {
         List<Game> games = gameRepository.findAll();
         List<GameOutDTO> gameOutDTOs = new ArrayList<>();
         for (Game game : games) {
-            gameOutDTOs.add(GameMapper.toOutDTO(game, gameComputationService));
+            gameOutDTOs.add(gameMapper.toOutDTO(game));
         }
         return gameOutDTOs;
     }
@@ -70,7 +69,7 @@ public class GameService {
         List<Game> games = gameRepository.findUnfinshedGames();
         List<GameOutDTO> gameOutDTOs = new ArrayList<>();
         for (Game game : games) {
-            gameOutDTOs.add(GameMapper.toOutDTO(game, gameComputationService));
+            gameOutDTOs.add(gameMapper.toOutDTO(game));
         }
         return gameOutDTOs;
     }
@@ -82,7 +81,7 @@ public class GameService {
 
     public GameOutDTO getById(Long id) {
         Game game = getGameById(id);
-        return GameMapper.toOutDTO(game, gameComputationService);
+        return gameMapper.toOutDTO(game);
     }
 
 }

@@ -2,27 +2,36 @@ package tyg.tradinggame.tradinggame.controller.mappers.game;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForAll;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 
+@Component
 public class WalletMapper {
 
-    public static WalletOutDTOForOwner toOutDTOForOwner(Wallet wallet) {
+    private final StockOrderMapper stockOrderMapper;
+
+    public WalletMapper(StockOrderMapper stockOrderMapper) {
+        this.stockOrderMapper = stockOrderMapper;
+    }
+
+    public WalletOutDTOForOwner toOutDTOForOwner(Wallet wallet) {
         return new WalletOutDTOForOwner(
                 wallet.getId(),
                 wallet.getGame().getId(),
                 wallet.getBalance(),
                 wallet.getLastMonthProfit(),
                 wallet.getLastYearProfit(),
-                StockOrderMapper.toOutDTOList(wallet.getStockOrders()));
+                stockOrderMapper.toOutDTOList(wallet.getStockOrders()));
     }
 
-    public static List<WalletOutDTOForOwner> toOutDTOForOwnerList(List<Wallet> wallets) {
-        return wallets.stream().map(WalletMapper::toOutDTOForOwner).toList();
+    public List<WalletOutDTOForOwner> toOutDTOForOwnerList(List<Wallet> wallets) {
+        return wallets.stream().map(this::toOutDTOForOwner).toList();
     }
 
-    public static WalletOutDTOForAll toOutDTOForAll(Wallet wallet) {
+    public WalletOutDTOForAll toOutDTOForAll(Wallet wallet) {
         return new WalletOutDTOForAll(
                 wallet.getOwner().getId(),
                 wallet.getOwner().getUsername(),
@@ -31,7 +40,7 @@ public class WalletMapper {
                 wallet.getLastYearProfit());
     }
 
-    public static List<WalletOutDTOForAll> toOutDTOForAllList(List<Wallet> wallets) {
-        return wallets.stream().map(WalletMapper::toOutDTOForAll).toList();
+    public List<WalletOutDTOForAll> toOutDTOForAllList(List<Wallet> wallets) {
+        return wallets.stream().map(this::toOutDTOForAll).toList();
     }
 }

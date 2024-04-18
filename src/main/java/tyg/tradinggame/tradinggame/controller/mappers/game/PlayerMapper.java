@@ -1,16 +1,27 @@
 package tyg.tradinggame.tradinggame.controller.mappers.game;
 
-import tyg.tradinggame.tradinggame.application.game.GameComputationService;
+import org.springframework.stereotype.Component;
+
 import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 
+@Component
 public class PlayerMapper {
 
-    public static PlayerOutDTO toOutDTO(Player player, GameComputationService gameComputationService) {
+    private final WalletMapper walletMapper;
+    private final GameMapper gameMapper;
+
+    public PlayerMapper(WalletMapper walletMapper,
+            GameMapper gameMapper) {
+        this.walletMapper = walletMapper;
+        this.gameMapper = gameMapper;
+    }
+
+    public PlayerOutDTO toOutDTO(Player player) {
         return new PlayerOutDTO(
                 player.getUsername(),
                 player.getId(),
-                WalletMapper.toOutDTOForOwnerList(player.getWallets()),
-                GameMapper.toOutDTOList(player.getCreatedGames(), gameComputationService));
+                walletMapper.toOutDTOForOwnerList(player.getWallets()),
+                gameMapper.toOutDTOList(player.getCreatedGames()));
     }
 }
