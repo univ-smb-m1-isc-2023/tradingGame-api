@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tyg.tradinggame.tradinggame.application.game.GameService;
 import tyg.tradinggame.tradinggame.application.game.PlayerService;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
-import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerInDTO;
-import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

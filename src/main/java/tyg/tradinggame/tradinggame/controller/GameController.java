@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import tyg.tradinggame.tradinggame.application.game.GameService;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;

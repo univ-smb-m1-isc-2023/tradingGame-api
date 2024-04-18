@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
-import tyg.tradinggame.tradinggame.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
+import tyg.tradinggame.tradinggame.controller.mappers.game.StockValueMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValueRepository;
-import tyg.tradinggame.tradinggame.mappers.game.StockValueMapper;
 
 @Service
 public class StockValueService {

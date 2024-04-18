@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.mappers.game.GameMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
-import tyg.tradinggame.tradinggame.mappers.game.GameMapper;
 
 @Service
 public class GameService {

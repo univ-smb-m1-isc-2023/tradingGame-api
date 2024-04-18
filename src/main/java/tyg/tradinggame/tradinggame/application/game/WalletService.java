@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
 import tyg.tradinggame.tradinggame.application.stock.StockValueService;
-import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderInDTO;
-import tyg.tradinggame.tradinggame.dto.game.StockOrderDTOs.StockOrderOutDTO;
-import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForAll;
-import tyg.tradinggame.tradinggame.dto.game.WalletDTOs.WalletOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForAll;
+import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.mappers.game.StockOrderMapper;
+import tyg.tradinggame.tradinggame.controller.mappers.game.WalletMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.WalletRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
-import tyg.tradinggame.tradinggame.mappers.game.StockOrderMapper;
-import tyg.tradinggame.tradinggame.mappers.game.WalletMapper;
 
 @Service
 public class WalletService {

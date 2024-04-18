@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.PlayerRepository;
-import tyg.tradinggame.tradinggame.mappers.game.PlayerMapper;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
-import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerInDTO;
-import tyg.tradinggame.tradinggame.dto.game.PlayerDTOs.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerInDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.controller.mappers.game.PlayerMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 
 @Service
