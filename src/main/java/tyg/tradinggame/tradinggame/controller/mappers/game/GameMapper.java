@@ -1,15 +1,11 @@
 package tyg.tradinggame.tradinggame.controller.mappers.game;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import tyg.tradinggame.tradinggame.application.game.GameComputationService;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
 
 public class GameMapper {
 
