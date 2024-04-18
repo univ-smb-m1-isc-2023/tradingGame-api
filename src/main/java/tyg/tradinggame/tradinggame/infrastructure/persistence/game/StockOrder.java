@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderStatusEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import jakarta.persistence.ManyToOne;

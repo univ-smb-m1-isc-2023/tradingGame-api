@@ -9,14 +9,11 @@ import jakarta.persistence.GenerationType;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity

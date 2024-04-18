@@ -2,8 +2,6 @@ package tyg.tradinggame.tradinggame.controller.dto.game;
 
 import java.time.LocalDate;
 
-import org.aspectj.weaver.ast.Or;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;

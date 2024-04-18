@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.EntityNotFoundException;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
 import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
 import tyg.tradinggame.tradinggame.controller.mappers.game.StockValueMapper;

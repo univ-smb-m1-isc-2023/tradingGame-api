@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tyg.tradinggame.tradinggame.application.game.WalletService;
 import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
-import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderOutDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
 
 @CrossOrigin(origins = "*")

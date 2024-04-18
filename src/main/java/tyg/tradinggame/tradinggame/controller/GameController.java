@@ -13,7 +13,6 @@ import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "*")
 @RestController
