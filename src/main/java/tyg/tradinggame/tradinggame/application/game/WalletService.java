@@ -1,5 +1,7 @@
 package tyg.tradinggame.tradinggame.application.game;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Service;
 
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
@@ -44,19 +46,24 @@ public class WalletService {
 
     public WalletOutDTOForOwner createStockOrder(StockOrderBasicAttributesInDTO stockOrderInDTO) {
         Wallet wallet = getWalletById(stockOrderInDTO.walletId());
+        LocalDate expirationGameDate;
         if (walletComputationService
                 .availableBalance(wallet) < (double) (stockOrderInDTO.price() * stockOrderInDTO.quantity())) {
             throw new PublicIllegalArgumentException("Not enough balance to create this order");
         }
-        if (stockOrderInDTO.expirationGameDate().isBefore(wallet.getGame().getCurrentGameDate())) {
+        if (stockOrderInDTO.expirationGameDate() == null) {
+            expirationGameDate = wallet.getGame().getFinalGameDate();
+        } else if (stockOrderInDTO.expirationGameDate().isBefore(wallet.getGame().getCurrentGameDate())) {
             throw new PublicIllegalArgumentException("Expiration date is before current game date");
+        } else {
+            expirationGameDate = stockOrderInDTO.expirationGameDate();
         }
         StockValue stockValue = stockValueService.getStockValueById(stockOrderInDTO.stockValueId());
         StockOrder stockOrder = new StockOrder(
                 stockOrderInDTO.type(),
                 stockOrderInDTO.price(),
                 stockOrderInDTO.quantity(),
-                stockOrderInDTO.expirationGameDate(),
+                expirationGameDate,
                 wallet,
                 stockValue);
         stockOrderService.save(stockOrder);
