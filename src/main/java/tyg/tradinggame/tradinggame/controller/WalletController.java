@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import tyg.tradinggame.tradinggame.application.game.WalletService;
 import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -16,6 +19,12 @@ public class WalletController {
 
     public WalletController(WalletService walletService) {
         this.walletService = walletService;
+    }
+
+    @GetMapping("/wallet/{id}")
+    public WalletOutDTOForOwner walletById(@PathVariable Long id) {
+        WalletOutDTOForOwner walletOutDTOForOwner = walletService.getById(id);
+        return walletOutDTOForOwner;
     }
 
     @PostMapping("/wallet/stock_order")
