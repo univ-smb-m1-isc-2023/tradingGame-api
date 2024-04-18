@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import tyg.tradinggame.tradinggame.application.game.WalletComputationService;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForAll;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
@@ -12,9 +13,12 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 public class WalletMapper {
 
     private final StockOrderMapper stockOrderMapper;
+    private final WalletComputationService walletComputationService;
 
-    public WalletMapper(StockOrderMapper stockOrderMapper) {
+    public WalletMapper(StockOrderMapper stockOrderMapper,
+            WalletComputationService walletComputationService) {
         this.stockOrderMapper = stockOrderMapper;
+        this.walletComputationService = walletComputationService;
     }
 
     public WalletOutDTOForOwner toOutDTOForOwner(Wallet wallet) {
@@ -22,6 +26,7 @@ public class WalletMapper {
                 wallet.getId(),
                 wallet.getGame().getId(),
                 wallet.getBalance(),
+                walletComputationService.availableBalance(wallet),
                 wallet.getLastMonthProfit(),
                 wallet.getLastYearProfit(),
                 stockOrderMapper.toOutDTOList(wallet.getStockOrders()));

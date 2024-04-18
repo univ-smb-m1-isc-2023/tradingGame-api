@@ -21,15 +21,18 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final StockOrderService stockOrderService;
     private final StockValueService stockValueService;
+    private final WalletComputationService walletComputationService;
     private final WalletMapper walletMapper;
 
     public WalletService(WalletRepository walletRepository,
             StockOrderService stockOrderService,
             StockValueService stockValueService,
+            WalletComputationService walletComputationService,
             WalletMapper walletMapper) {
         this.walletRepository = walletRepository;
         this.stockOrderService = stockOrderService;
         this.stockValueService = stockValueService;
+        this.walletComputationService = walletComputationService;
         this.walletMapper = walletMapper;
     }
 
@@ -41,7 +44,8 @@ public class WalletService {
 
     public WalletOutDTOForOwner createStockOrder(StockOrderBasicAttributesInDTO stockOrderInDTO) {
         Wallet wallet = getWalletById(stockOrderInDTO.walletId());
-        if (wallet.getBalance() < (double) (stockOrderInDTO.price() * stockOrderInDTO.quantity())) {
+        if (walletComputationService
+                .availableBalance(wallet) < (double) (stockOrderInDTO.price() * stockOrderInDTO.quantity())) {
             throw new PublicIllegalArgumentException("Not enough balance to create this order");
         }
         if (stockOrderInDTO.expirationGameDate().isBefore(wallet.getGame().getCurrentGameDate())) {

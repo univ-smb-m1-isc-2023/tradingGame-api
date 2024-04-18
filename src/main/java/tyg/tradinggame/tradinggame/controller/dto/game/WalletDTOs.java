@@ -18,6 +18,7 @@ public class WalletDTOs {
                         Long id,
                         Long gameId,
                         double balance,
+                        double availableBalance,
                         double lastMonthProfit,
                         double lastYearProfit,
                         List<StockOrderOutDTO> stockOrders) {
