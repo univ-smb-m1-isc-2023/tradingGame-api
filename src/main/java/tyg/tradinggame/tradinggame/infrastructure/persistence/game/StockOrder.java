@@ -93,6 +93,9 @@ public class StockOrder {
     }
 
     public Double getExecutionPrice() {
+        if (executionPrice == null) {
+            return .0;
+        }
         return executionPrice;
     }
 
