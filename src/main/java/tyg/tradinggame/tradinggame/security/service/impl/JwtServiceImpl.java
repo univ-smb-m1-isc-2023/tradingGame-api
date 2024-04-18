@@ -37,7 +37,6 @@ public class JwtServiceImpl implements JwtService {
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
-        System.out.println(extractAllClaims(token));
         return claimsResolvers.apply(claims);
     }
 

@@ -31,22 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        System.out.println("je passe par la");
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("je passe aussi par la");
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);
         System.out.println(userEmail);
         if (StringUtils.isNotEmpty(userEmail)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("et me voila ici");
             UserDetails userDetails = userService.userDetailsService()
                     .loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                System.out.println("ne pas m'oublier");
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
