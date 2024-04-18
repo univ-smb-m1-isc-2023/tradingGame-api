@@ -1,10 +1,22 @@
-package tyg.tradinggame.tradinggame.application.game.logic;
+package tyg.tradinggame.tradinggame.application.game.logic.stockorder;
 
 import java.util.Random;
 
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 
 public class Utils {
+
+    public static void executeBuy(StockOrder stockOrder, double price) {
+        deduceSumFromWallet(stockOrder, price);
+        stockOrder.setExecutionPrice(price);
+        stockOrder.setExecuted(true);
+    }
+
+    public static void executeSell(StockOrder stockOrder, double price) {
+        addSumToWallet(stockOrder, price);
+        stockOrder.setExecutionPrice(price);
+        stockOrder.setExecuted(true);
+    }
 
     public static void deduceSumFromWallet(StockOrder stockOrder, double price) {
         double balance = stockOrder.getWallet().getBalance() - price * stockOrder.getQuantity();

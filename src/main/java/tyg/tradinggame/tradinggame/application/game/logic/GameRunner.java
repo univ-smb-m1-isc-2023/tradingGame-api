@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyLimitStockOrderLogic;
+import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyMarketStockOrderLogic;
+import tyg.tradinggame.tradinggame.application.game.logic.stockorder.SellLimitStockOrderLogic;
+import tyg.tradinggame.tradinggame.application.game.logic.stockorder.SellMarketStockOrderLogic;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
@@ -48,8 +52,7 @@ public class GameRunner {
                 StockOrder stockOrder = iterator.next();
                 boolean passed = tryToPassStockOrder(stockOrder);
                 if (passed) {
-                    stockOrder.setExecuted(true);
-                    gameLogicService.updateFromOrder(stockOrder);
+                    gameLogicService.persistStockOrderUpdate(stockOrder);
                     iterator.remove();
                 }
             }

@@ -33,6 +33,7 @@ public class StockOrderDTOs {
         public static record StockOrderOutDTO(
                         OrderTypeEnum type,
                         double price,
+                        double executionPrice,
                         Long quantity,
                         LocalDate creationGameDate,
                         LocalDate expirationGameDate,

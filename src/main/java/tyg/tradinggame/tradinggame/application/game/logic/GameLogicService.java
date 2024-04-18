@@ -78,7 +78,7 @@ public class GameLogicService {
         return stockOrderRepository.findPendingOrdersForGame(game);
     }
 
-    public void updateFromOrder(StockOrder stockOrder) {
+    public void persistStockOrderUpdate(StockOrder stockOrder) {
         walletRepository.save(stockOrder.getWallet());
         stockOrderRepository.save(stockOrder);
     }

@@ -32,6 +32,7 @@ public class StockOrderMapper {
         return new StockOrderOutDTO(
                 stockOrder.getType(),
                 stockOrder.getPrice(),
+                stockOrder.getExecutionPrice(),
                 stockOrder.getQuantity(),
                 stockOrder.getCreationGameDate(),
                 stockOrder.getExpirationGameDate(),

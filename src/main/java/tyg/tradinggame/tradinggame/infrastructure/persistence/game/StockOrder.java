@@ -28,6 +28,8 @@ public class StockOrder {
 
     @Column(nullable = false)
     private double price;
+    @Column(nullable = true)
+    private Double executionPrice;
     @Column(nullable = false)
     private Long quantity;
     @Column(nullable = false)
@@ -36,6 +38,7 @@ public class StockOrder {
     private LocalDate expirationGameDate;
     @Column(nullable = false)
     private boolean executed;
+
     @Column(nullable = false)
     private boolean cancelled;
 
@@ -87,6 +90,14 @@ public class StockOrder {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Double getExecutionPrice() {
+        return executionPrice;
+    }
+
+    public void setExecutionPrice(Double executionPrice) {
+        this.executionPrice = executionPrice;
     }
 
     public Long getQuantity() {
