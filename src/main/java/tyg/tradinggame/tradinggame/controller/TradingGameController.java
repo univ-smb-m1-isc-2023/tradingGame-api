@@ -57,6 +57,7 @@ public class TradingGameController {
         response.put("time_format", "dd-MM-yyyy HH:mm:ss");
         response.put("elapsed_time",
                 String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds));
+        response.put("build_ref", "19.04.2024");
 
         return response;
     }
