@@ -75,6 +75,22 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+            <groupId>io.github.git-commit-id</groupId>
+            <artifactId>git-commit-id-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>revision</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <dateFormat>dd-MM-yyyy HH:mm:ss</dateFormat> <!-- adjust this to your liking -->
+                <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+            </configuration>
+        </plugin>
 		</plugins>
 	</build>
 

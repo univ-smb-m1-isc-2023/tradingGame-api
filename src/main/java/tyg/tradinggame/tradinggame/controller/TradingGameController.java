@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 import tyg.tradinggame.tradinggame.application.UserService;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.UserGame;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -57,7 +60,17 @@ public class TradingGameController {
         response.put("time_format", "dd-MM-yyyy HH:mm:ss");
         response.put("elapsed_time",
                 String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds));
-        response.put("build_ref", "19.04.2024");
+
+        Properties properties = new Properties();
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("git.properties")) {
+            properties.load(input);
+            String buildTime = properties.getProperty("git.build.time");
+
+            response.put("build_ref", buildTime);
+        } catch (IOException e) {
+            response.put("build_ref", "could not read git.properties file");
+        }
 
         return response;
     }
