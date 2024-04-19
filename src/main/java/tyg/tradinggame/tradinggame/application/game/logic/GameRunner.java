@@ -115,4 +115,8 @@ public class GameRunner {
         this.moveScheduleTimes = moveTimes;
     }
 
+    public boolean complated() {
+        return moveScheduleTimes.isEmpty();
+    }
+
 }

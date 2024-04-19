@@ -38,7 +38,7 @@ public class GameScheduler {
         while (iterator.hasNext()) {
             GameRunner gameRunner = iterator.next();
             gameRunner.move();
-            if (gameRunner.getGame().getCurrentGameDate().equals(gameRunner.getGame().getFinalGameDate())) {
+            if (gameRunner.complated()) {
                 iterator.remove();
             }
 
