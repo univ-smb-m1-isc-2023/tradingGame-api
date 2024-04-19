@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import tyg.tradinggame.tradinggame.application.game.GameService;
 import tyg.tradinggame.tradinggame.application.game.PlayerService;
@@ -15,9 +12,7 @@ import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttribu
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import tyg.tradinggame.tradinggame.security.service.AuthenticationService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -26,10 +21,13 @@ public class PlayerController {
     private final PlayerService playerService;
     private final GameService gameService;
 
+    private final AuthenticationService authenticationService;
+
     public PlayerController(PlayerService playerService,
-            GameService gameService) {
+            GameService gameService, AuthenticationService authenticationService) {
         this.playerService = playerService;
         this.gameService = gameService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/player")
@@ -49,12 +47,12 @@ public class PlayerController {
         }
     }
 
-    @PostMapping("/player")
-    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
-        System.err.println("Creating player with username: " + playerInDTO.username());
-        PlayerOutDTO player = playerService.createPlayer(playerInDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(player);
-    }
+//    @PostMapping("/player")
+//    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
+//        System.err.println("Creating player with username: " + playerInDTO.username());
+//        PlayerOutDTO player = playerService.createPlayer(playerInDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(player);
+//    }
 
     @PostMapping("/player/{playerId}/game")
     public ResponseEntity<?> createGame(@PathVariable Long playerId,
@@ -69,5 +67,12 @@ public class PlayerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("player/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        authenticationService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
 
 }

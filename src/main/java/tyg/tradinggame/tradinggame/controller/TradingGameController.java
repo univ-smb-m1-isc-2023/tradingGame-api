@@ -4,8 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tyg.tradinggame.tradinggame.application.UserService;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.UserGame;
+import tyg.tradinggame.tradinggame.application.game.PlayerService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,11 +21,11 @@ import java.util.Properties;
 @RequestMapping("/")
 public class TradingGameController {
 
-    private final UserService userService;
+    private final PlayerService playerService;
     private static final LocalDateTime DEPLOYMENT_TIME = LocalDateTime.now();
 
-    public TradingGameController(UserService userService) {
-        this.userService = userService;
+    public TradingGameController(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
     @GetMapping("/")
@@ -34,15 +33,6 @@ public class TradingGameController {
         return "Hello world!";
     }
 
-    @GetMapping("/create")
-    public UserGame create() {
-        return userService.create("enzo");
-    }
-
-    @GetMapping("/show")
-    public List<UserGame> show() {
-        return userService.users();
-    }
 
     @GetMapping("/timestats")
     public Map<String, Object> timeStats() {
