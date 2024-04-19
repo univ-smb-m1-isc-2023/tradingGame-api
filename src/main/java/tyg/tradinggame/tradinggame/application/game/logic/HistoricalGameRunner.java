@@ -63,10 +63,6 @@ public class HistoricalGameRunner {
             }
             moveScheduleTimes.remove(0);
             dates.remove(0);
-            System.err.println("This Game dates: " + dates.size());
-            for (LocalDate date : dates) {
-                System.err.println(date);
-            }
             System.err.println("Game date: " + game.getCurrentGameDate());
             gameLogicService.setGameDate(game, dates.get(0));
             System.err.println("Game date: " + game.getCurrentGameDate());
