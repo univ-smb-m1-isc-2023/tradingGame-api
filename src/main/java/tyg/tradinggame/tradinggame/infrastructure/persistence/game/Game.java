@@ -1,6 +1,7 @@
 package tyg.tradinggame.tradinggame.infrastructure.persistence.game;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,15 +28,22 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private GameTypeEnum type;
 
+    @Column(nullable = false)
     private LocalDate initialGameDate;
+    @Column(nullable = true)
     private LocalDate finalGameDate;
+    @Column(nullable = false)
     private LocalDate currentGameDate;
 
+    @Column(nullable = false)
     private double initialBalance;
+    @Column(nullable = false)
     private Duration moveDuration;
 
     @ManyToOne

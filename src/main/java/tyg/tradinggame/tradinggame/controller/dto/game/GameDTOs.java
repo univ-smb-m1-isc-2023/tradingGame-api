@@ -15,10 +15,10 @@ public class GameDTOs {
         public static record GameBasicAttributesInDTO(
                         @NotBlank(message = "Title is mandatory") String title,
                         @NotBlank(message = "Type is mandatory") GameTypeEnum type,
-                        @NotNull(message = "Initial date is mandatory") LocalDate initialDate,
-                        @NotNull(message = "Final date is mandatory") LocalDate finalDate,
+                        LocalDate initialDate,
+                        LocalDate finalDate,
                         @NotNull(message = "Initial balance is mandatory") double initialBalance,
-                        @NotNull(message = "Move duration is mandatory") Duration moveDuration,
+                        Duration moveDuration,
                         @NotNull(message = "Admin id is mandatory") Long adminId,
                         @NotEmpty(message = "Player ids are mandatory") List<Long> playerIds) {
         }
