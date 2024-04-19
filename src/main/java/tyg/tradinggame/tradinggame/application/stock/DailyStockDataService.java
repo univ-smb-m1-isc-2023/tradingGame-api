@@ -2,7 +2,7 @@ package tyg.tradinggame.tradinggame.application.stock;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDataRepository;

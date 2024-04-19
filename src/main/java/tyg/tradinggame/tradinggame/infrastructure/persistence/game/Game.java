@@ -15,6 +15,7 @@ import jakarta.persistence.OneToMany;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,9 @@ public class Game {
     @JsonManagedReference
     private List<Wallet> wallets = new ArrayList<>();
 
+    @Column(nullable = false)
+    private boolean isLoaded = false;
+
     public Game(
             String title,
             GameTypeEnum type,
@@ -70,6 +74,14 @@ public class Game {
         this.initialBalance = initialBalance;
         this.moveDuration = moveDuration;
         this.admin = admin;
+    }
+
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public void setLoaded(boolean isLoaded) {
+        this.isLoaded = isLoaded;
     }
 
     public Game() {

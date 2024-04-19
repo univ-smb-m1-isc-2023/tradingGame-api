@@ -2,6 +2,7 @@ package tyg.tradinggame.tradinggame.application.game.logic;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepositor
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrderRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.WalletRepository;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTypeEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockDataRepository;
 
@@ -32,8 +34,16 @@ public class GameLogicService {
         this.dailyStockDataRepository = dailyStockDataRepository;
     }
 
-    public List<Game> getCurrentGames() {
-        return gameRepository.findUnfinshedGames();
+    public List<Game> getUnfinishedHistoricalGames() {
+        return gameRepository.findUnfinshedGamesByType(GameTypeEnum.HISTORICAL);
+    }
+
+    public List<Game> getNewUnfinishedHistoricalGames() {
+        return gameRepository.findUnfinshedNotLoadedGamesByType(GameTypeEnum.HISTORICAL);
+    }
+
+    public void setHistoricalGameLoadState(boolean isLoaded) {
+        gameRepository.setLoadState(GameTypeEnum.HISTORICAL, isLoaded);
     }
 
     public Duration getTotalDuration(Game game) {
@@ -85,6 +95,11 @@ public class GameLogicService {
 
     public void setGameDate(Game game, LocalDate newDate) {
         game.setCurrentGameDate(newDate);
+        gameRepository.save(game);
+    }
+
+    public void setLoaded(Game game) {
+        game.setLoaded(true);
         gameRepository.save(game);
     }
 }

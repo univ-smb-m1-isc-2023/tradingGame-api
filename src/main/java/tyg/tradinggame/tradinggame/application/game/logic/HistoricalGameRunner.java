@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyLimitStockOrderLogic;
 import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyMarketStockOrderLogic;
 import tyg.tradinggame.tradinggame.application.game.logic.stockorder.SellLimitStockOrderLogic;
@@ -17,7 +19,7 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 
-public class GameRunner {
+public class HistoricalGameRunner {
 
     private final GameLogicService gameLogicService;
     private final Game game;
@@ -26,7 +28,7 @@ public class GameRunner {
     private Map<Long, DailyStockData> currentDailyStockDatas;
     private List<LocalDate> dates;
 
-    public GameRunner(GameLogicService gameLogicService,
+    public HistoricalGameRunner(GameLogicService gameLogicService,
             Game game) {
         this.gameLogicService = gameLogicService;
         this.game = game;
@@ -34,6 +36,7 @@ public class GameRunner {
         this.dates = new ArrayList<>(gameLogicService.getTotalMoveDates(game));
     }
 
+    @Transactional
     private void initializeMoveTimes() {
         Long remainingMoves = gameLogicService.getRemainingMoveNumber(game);
         moveScheduleTimes = new ArrayList<>();
@@ -41,6 +44,8 @@ public class GameRunner {
         for (long i = 0; i < remainingMoves; i++) {
             moveScheduleTimes.add(initialDateTime.plus(game.getMoveDuration().multipliedBy(i)));
         }
+        gameLogicService.setLoaded(game);
+
     }
 
     public void move() {
@@ -58,6 +63,10 @@ public class GameRunner {
             }
             moveScheduleTimes.remove(0);
             dates.remove(0);
+            System.err.println("This Game dates: " + dates.size());
+            for (LocalDate date : dates) {
+                System.err.println(date);
+            }
             System.err.println("Game date: " + game.getCurrentGameDate());
             gameLogicService.setGameDate(game, dates.get(0));
             System.err.println("Game date: " + game.getCurrentGameDate());

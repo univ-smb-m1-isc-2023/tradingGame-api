@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
