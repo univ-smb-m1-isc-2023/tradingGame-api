@@ -86,6 +86,31 @@ public class DailyStockDataService {
         stockValue.setDailyStockData(dailyStockDataList);
     }
 
+    public void createOrUpdateDailyStockData(DailyStockDataBasicAttributesInDTO dailyStockDataBasicAttributesDTO,
+            StockValue stockValue) {
+        DailyStockData existingDailyStockData = dailyStockDataRepository.findByStockValue_SymbolAndDate(
+                stockValue.getSymbol(),
+                dailyStockDataBasicAttributesDTO.date());
+        if (existingDailyStockData != null) {
+            existingDailyStockData.setOpen(dailyStockDataBasicAttributesDTO.open());
+            existingDailyStockData.setHigh(dailyStockDataBasicAttributesDTO.high());
+            existingDailyStockData.setLow(dailyStockDataBasicAttributesDTO.low());
+            existingDailyStockData.setClose(dailyStockDataBasicAttributesDTO.close());
+            existingDailyStockData.setVolume(dailyStockDataBasicAttributesDTO.volume());
+            dailyStockDataRepository.save(existingDailyStockData);
+        } else {
+            DailyStockData dailyStockData = new DailyStockData(
+                    dailyStockDataBasicAttributesDTO.open(),
+                    dailyStockDataBasicAttributesDTO.high(),
+                    dailyStockDataBasicAttributesDTO.low(),
+                    dailyStockDataBasicAttributesDTO.close(),
+                    dailyStockDataBasicAttributesDTO.volume(),
+                    dailyStockDataBasicAttributesDTO.date(),
+                    stockValue);
+            dailyStockDataRepository.save(dailyStockData);
+        }
+    }
+
     public void validateDatePeriod(String startDate, String endDate) {
 
         try {

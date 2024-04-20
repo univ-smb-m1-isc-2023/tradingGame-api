@@ -11,16 +11,20 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import org.springframework.transaction.annotation.Transactional;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
+import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClient;
 
 @Service
 public class GameScheduler {
     private final GameLogicService gameLogicService;
+    private final DailyStockDataApiClient dailyStockDataApiClient;
 
     private List<HistoricalGameRunner> historicalGameRunners = new ArrayList<>();
     private List<LiveGameRunner> liveGameRunners = new ArrayList<>();
 
-    public GameScheduler(GameLogicService gameLogicService) {
+    public GameScheduler(GameLogicService gameLogicService,
+            DailyStockDataApiClient dailyStockDataApiClient) {
         this.gameLogicService = gameLogicService;
+        this.dailyStockDataApiClient = dailyStockDataApiClient;
         this.initializeGameRunners();
     }
 
@@ -85,6 +89,8 @@ public class GameScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void advanceLiveGames() {
+        System.err.println("Advancing live games");
+        dailyStockDataApiClient.update();
         Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
         while (iterator.hasNext()) {
             LiveGameRunner gameRunner = iterator.next();

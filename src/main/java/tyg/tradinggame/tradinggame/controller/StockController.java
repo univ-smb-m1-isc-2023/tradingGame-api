@@ -65,7 +65,7 @@ public class StockController {
 
     @GetMapping("/populate/{symbol}")
     public ResponseEntity<String> populateStockData(@PathVariable String symbol) {
-        dailyStockDataApiClient.fetchData(symbol);
+        dailyStockDataApiClient.fetchAllData(symbol);
 
         return ResponseEntity.ok("Stock data populated for symbol: " + symbol);
     }

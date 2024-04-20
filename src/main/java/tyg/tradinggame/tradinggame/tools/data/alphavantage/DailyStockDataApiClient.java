@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,6 +65,7 @@ public class DailyStockDataApiClient {
     }
 
     @PostConstruct
+    @Transactional
     public void populate() {
         String defualt_api_key = API_KEY;
         String default_api_domain = API_DOMAIN;
@@ -76,7 +78,7 @@ public class DailyStockDataApiClient {
                 .toList();
         for (String string : demo_symbols) {
             if (!presentSymbols.contains(string)) {
-                fetchData(string);
+                fetchAllData(string);
                 fetched = true;
             }
         }
@@ -89,11 +91,33 @@ public class DailyStockDataApiClient {
         this.API_KEY = defualt_api_key;
     }
 
-    public void fetchData(String symbol) {
+    @Transactional
+    public void update() {
 
-        String apiUrl = this.API_DOMAIN + "/query?function=" + function +
-                "&symbol=" + symbol + "&outputsize=full" + "&apikey="
-                + API_KEY;
+        boolean fetched = false;
+
+        List<String> presentSymbols = stockValueService.getAllStockValues().stream().map(StockValue::getSymbol)
+                .toList();
+        for (String string : presentSymbols) {
+
+            fetchLastData(string);
+            fetched = true;
+        }
+
+        if (fetched) {
+            System.out.println("Fetched new data from AlphaVantage");
+        }
+
+    }
+
+    public String buildUrl(String domain, String key, String symbol, String outputSize) {
+        return domain + "/query?function=" + function + "&symbol=" + symbol + "&outputsize=" + outputSize
+                + "&apikey=" + key;
+    }
+
+    @Transactional
+    public void fetchLastData(String symbol) {
+        String apiUrl = buildUrl(API_DOMAIN, API_KEY, symbol, "compact");
 
         System.err.println("Fetching data from: " + apiUrl);
 
@@ -117,7 +141,71 @@ public class DailyStockDataApiClient {
             try {
                 responseBodyJson = objectMapper.writeValueAsString(responseBody);
             } catch (JsonProcessingException e) {
-                System.out.println("Parsed StockValue: " + responseBody);
+                System.out.println("While parsing: " + responseBody);
+                e.printStackTrace();
+                return;
+            }
+
+            JSONObject jsonObject = new JSONObject(responseBodyJson);
+
+            JSONObject metaData = jsonObject.getJSONObject(metaDataKey);
+            StockValueInDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
+
+            StockValue stockValue = stockValueService.createOrUpdateStockValue(stockValueDTO);
+
+            JSONObject timeSeries = jsonObject.getJSONObject(dataKey);
+
+            List<DailyStockDataBasicAttributesInDTO> dailyStockDataBasicAttributesDTO = ResponseParser
+                    .toDailyStockDataModelList(timeSeries);
+
+            DailyStockDataBasicAttributesInDTO latestDailyStockDataBasicAttributesInDTO = dailyStockDataBasicAttributesDTO
+                    .get(0);
+            for (int i = 1; i < dailyStockDataBasicAttributesDTO.size(); i++) {
+                DailyStockDataBasicAttributesInDTO dailyStockDataBasicAttributesInDTO = dailyStockDataBasicAttributesDTO
+                        .get(i);
+                if (dailyStockDataBasicAttributesInDTO.date()
+                        .isAfter(latestDailyStockDataBasicAttributesInDTO.date())) {
+                    latestDailyStockDataBasicAttributesInDTO = dailyStockDataBasicAttributesInDTO;
+                }
+            }
+
+            dailyStockDataService.createOrUpdateDailyStockData(latestDailyStockDataBasicAttributesInDTO, stockValue);
+
+            System.err.println(
+                    "Fetched data for: " + symbol + " date: " + latestDailyStockDataBasicAttributesInDTO.date());
+
+        } else {
+            System.err.println("Error: " + response.getStatusCode());
+        }
+    }
+
+    @Transactional
+    public void fetchAllData(String symbol) {
+        String apiUrl = buildUrl(API_DOMAIN, API_KEY, symbol, "full");
+
+        System.err.println("Fetching data from: " + apiUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<Map<String, Object>>() {
+                });
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Map<String, Object> responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseBodyJson;
+            try {
+                responseBodyJson = objectMapper.writeValueAsString(responseBody);
+            } catch (JsonProcessingException e) {
+                System.out.println("While parsing: " + responseBody);
                 e.printStackTrace();
                 return;
             }
@@ -135,7 +223,6 @@ public class DailyStockDataApiClient {
 
             dailyStockDataService.forceWriteStockData(dailyStockDataBasicAttributesDTO, stockValue);
 
-            // System.out.println("Parsed StockValue: " + responseBody);
         } else {
             System.err.println("Error: " + response.getStatusCode());
         }
