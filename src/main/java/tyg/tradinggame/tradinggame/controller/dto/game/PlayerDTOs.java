@@ -13,11 +13,16 @@ public class PlayerDTOs {
                         @NotBlank(message = "Password is mandatory") String password) {
         }
 
-        public static record PlayerOutDTO(
+        public static record PlayerOutDTOForOwner(
                         String username,
                         Long id,
                         List<WalletOutDTOForOwner> wallets,
                         List<GameOutDTO> createdGames) {
+        }
+
+        public static record PlayerOutDTOForSearch(
+                        String username,
+                        Long id) {
         }
 
 }

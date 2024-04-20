@@ -11,7 +11,8 @@ import tyg.tradinggame.tradinggame.application.game.PlayerService;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerInDTO;
-import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTOForSearch;
 import tyg.tradinggame.tradinggame.security.service.AuthenticationService;
 
 @CrossOrigin(origins = "*")
@@ -31,7 +32,7 @@ public class PlayerController {
     }
 
     @GetMapping("/player")
-    public List<PlayerOutDTO> allPlayers() {
+    public List<PlayerOutDTOForSearch> allPlayers() {
         System.err.println("Getting all players");
         return playerService.getAll();
     }
@@ -40,19 +41,12 @@ public class PlayerController {
     public ResponseEntity<?> playerById(@PathVariable Long id) {
         try {
             System.err.println("Getting player with id: " + id);
-            PlayerOutDTO player = playerService.getById(id);
+            PlayerOutDTOForOwner player = playerService.getById(id);
             return ResponseEntity.ok(player);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-//    @PostMapping("/player")
-//    public ResponseEntity<PlayerOutDTO> createPlayer(@RequestBody PlayerInDTO playerInDTO) {
-//        System.err.println("Creating player with username: " + playerInDTO.username());
-//        PlayerOutDTO player = playerService.createPlayer(playerInDTO);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(player);
-//    }
 
     @PostMapping("/player/{playerId}/game")
     public ResponseEntity<?> createGame(@PathVariable Long playerId,
@@ -73,6 +67,5 @@ public class PlayerController {
         authenticationService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
-
 
 }

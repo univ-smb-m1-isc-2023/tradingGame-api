@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.PlayerRepository;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicEntityNotFoundException;
-import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.dto.game.PlayerDTOs.PlayerOutDTOForSearch;
 import tyg.tradinggame.tradinggame.controller.mappers.game.PlayerMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 
@@ -25,21 +26,14 @@ public class PlayerService {
 
     // CRUD
 
-//    public PlayerOutDTO createPlayer(PlayerInDTO playerInDTO) {
-//        Player player = new Player(playerInDTO.username(), playerInDTO.password());
-//        playerRepository.save(player);
-//
-//        return playerMapper.toOutDTO(player);
-//    }
-
-    public List<PlayerOutDTO> getAll() {
+    public List<PlayerOutDTOForSearch> getAll() {
         List<Player> players = playerRepository.findAll();
-        return players.stream().map(game -> playerMapper.toOutDTO(game)).toList();
+        return players.stream().map(player -> playerMapper.toOutDTOForSearch(player)).toList();
     }
 
-    public PlayerOutDTO getById(Long id) {
+    public PlayerOutDTOForOwner getById(Long id) {
         Player player = getPlayerById(id);
-        return playerMapper.toOutDTO(player);
+        return playerMapper.toOutDTOForOwner(player);
     }
 
     // Utils
