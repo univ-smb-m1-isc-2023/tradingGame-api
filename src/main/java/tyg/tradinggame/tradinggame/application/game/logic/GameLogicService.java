@@ -38,8 +38,16 @@ public class GameLogicService {
         return gameRepository.findUnfinshedGamesByType(GameTypeEnum.HISTORICAL);
     }
 
+    public List<Game> getUnfinishedLiveGames() {
+        return gameRepository.findUnfinshedGamesByType(GameTypeEnum.LIVE);
+    }
+
     public List<Game> getNewUnfinishedHistoricalGames() {
         return gameRepository.findUnfinshedNotLoadedGamesByType(GameTypeEnum.HISTORICAL);
+    }
+
+    public List<Game> getNewUnfinishedLiveGames() {
+        return gameRepository.findUnfinshedNotLoadedGamesByType(GameTypeEnum.LIVE);
     }
 
     public void setHistoricalGameLoadState(boolean isLoaded) {

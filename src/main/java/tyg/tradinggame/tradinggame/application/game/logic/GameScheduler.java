@@ -16,7 +16,8 @@ import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 public class GameScheduler {
     private final GameLogicService gameLogicService;
 
-    private List<HistoricalGameRunner> gameRunners = new ArrayList<>();
+    private List<HistoricalGameRunner> historicalGameRunners = new ArrayList<>();
+    private List<LiveGameRunner> liveGameRunners = new ArrayList<>();
 
     public GameScheduler(GameLogicService gameLogicService) {
         this.gameLogicService = gameLogicService;
@@ -30,14 +31,19 @@ public class GameScheduler {
 
     @Transactional
     private void initializeGameRunners() {
-        gameRunners.addAll(gameLogicService.getUnfinishedHistoricalGames().stream()
+        historicalGameRunners.addAll(gameLogicService.getUnfinishedHistoricalGames().stream()
                 .map(game -> new HistoricalGameRunner(
+                        gameLogicService, game))
+                .toList());
+
+        liveGameRunners.addAll(gameLogicService.getUnfinishedLiveGames().stream()
+                .map(game -> new LiveGameRunner(
                         gameLogicService, game))
                 .toList());
     }
 
     @Transactional
-    private void updateGameRunners() {
+    private void updateHistoricalGameRunners() {
         List<Game> newGames = gameLogicService.getNewUnfinishedHistoricalGames();
         List<HistoricalGameRunner> newGameRunners = newGames.stream()
                 .map(game -> new HistoricalGameRunner(
@@ -46,31 +52,48 @@ public class GameScheduler {
         if (newGameRunners.isEmpty()) {
             return;
         }
-        gameRunners.addAll(newGameRunners);
+        historicalGameRunners.addAll(newGameRunners);
     }
 
-    public void addNewGame(Game game) {
-        HistoricalGameRunner gameRunner = new HistoricalGameRunner(gameLogicService, game);
-        gameRunners.add(gameRunner);
+    @Transactional
+    private void updateLiveGameRunners() {
+        List<Game> newGames = gameLogicService.getNewUnfinishedLiveGames();
+        List<LiveGameRunner> newGameRunners = newGames.stream()
+                .map(game -> new LiveGameRunner(
+                        gameLogicService, game))
+                .toList();
+        if (newGameRunners.isEmpty()) {
+            return;
+        }
+        liveGameRunners.addAll(newGameRunners);
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 1000)
     @Transactional
     public void advanceHistoricalGames() {
-        move();
-        updateGameRunners();
-    }
-
-    @Transactional
-    private void move() {
-        System.err.println("Moving");
-        Iterator<HistoricalGameRunner> iterator = gameRunners.iterator();
+        Iterator<HistoricalGameRunner> iterator = historicalGameRunners.iterator();
         while (iterator.hasNext()) {
             HistoricalGameRunner gameRunner = iterator.next();
             gameRunner.move();
-            if (gameRunner.complated()) {
+            if (gameRunner.isFinished()) {
                 iterator.remove();
             }
         }
+        updateHistoricalGameRunners();
     }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void advanceLiveGames() {
+        Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
+        while (iterator.hasNext()) {
+            LiveGameRunner gameRunner = iterator.next();
+            gameRunner.move();
+            if (gameRunner.isFinished()) {
+                iterator.remove();
+            }
+        }
+        updateLiveGameRunners();
+    }
+
 }

@@ -5,35 +5,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyLimitStockOrderLogic;
-import tyg.tradinggame.tradinggame.application.game.logic.stockorder.BuyMarketStockOrderLogic;
-import tyg.tradinggame.tradinggame.application.game.logic.stockorder.SellLimitStockOrderLogic;
-import tyg.tradinggame.tradinggame.application.game.logic.stockorder.SellMarketStockOrderLogic;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
-import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 
-public class HistoricalGameRunner {
+public class HistoricalGameRunner extends GameRunner {
 
-    private final GameLogicService gameLogicService;
-    private final Game game;
-    private List<StockOrder> stockOrders;
     private List<LocalDateTime> moveScheduleTimes;
-    private Map<Long, DailyStockData> currentDailyStockDatas;
-    private List<LocalDate> dates;
+    private List<LocalDate> moveDates;
 
     public HistoricalGameRunner(GameLogicService gameLogicService,
             Game game) {
-        this.gameLogicService = gameLogicService;
-        this.game = game;
+        super(gameLogicService, game);
         this.initializeMoveTimes();
-        this.dates = new ArrayList<>(gameLogicService.getTotalMoveDates(game));
+        this.moveDates = new ArrayList<>(gameLogicService.getTotalMoveDates(game));
     }
 
     @Transactional
@@ -49,6 +36,9 @@ public class HistoricalGameRunner {
     }
 
     public void move() {
+        if (moveScheduleTimes.isEmpty()) {
+            return;
+        }
         if (moveScheduleTimes.get(0).isBefore(LocalDateTime.now())) {
             updateStockOrders();
             updateDailyStockDatas();
@@ -62,54 +52,11 @@ public class HistoricalGameRunner {
                 }
             }
             moveScheduleTimes.remove(0);
-            dates.remove(0);
+            moveDates.remove(0);
             System.err.println("Game date: " + game.getCurrentGameDate());
-            gameLogicService.setGameDate(game, dates.get(0));
+            gameLogicService.setGameDate(game, moveDates.get(0));
             System.err.println("Game date: " + game.getCurrentGameDate());
         }
-    }
-
-    public boolean tryToPassStockOrder(StockOrder stockOrder) {
-        switch (stockOrder.getType()) {
-            case OrderTypeEnum.BUY_MARKET:
-                return BuyMarketStockOrderLogic.tryToPassStockOrder(
-                        currentDailyStockDatas.get(stockOrder.getStockValue().getId()), stockOrder);
-            case OrderTypeEnum.SELL_MARKET:
-                return SellMarketStockOrderLogic.tryToPassStockOrder(
-                        currentDailyStockDatas.get(stockOrder.getStockValue().getId()), stockOrder);
-            case OrderTypeEnum.BUY_LIMIT:
-                return BuyLimitStockOrderLogic.tryToPassStockOrder(
-                        currentDailyStockDatas.get(stockOrder.getStockValue().getId()), stockOrder);
-            case OrderTypeEnum.SELL_LIMIT:
-                return SellLimitStockOrderLogic.tryToPassStockOrder(
-                        currentDailyStockDatas.get(stockOrder.getStockValue().getId()), stockOrder);
-            default:
-                throw new IllegalArgumentException("Invalid order type");
-        }
-    }
-
-    private void updateStockOrders() {
-        this.stockOrders = gameLogicService.getPendingStockOrders(game);
-    }
-
-    public void updateDailyStockDatas() {
-        List<DailyStockData> currentDailyStockDatasList = gameLogicService.getCurrentDailyStockDatas(game);
-        this.currentDailyStockDatas = currentDailyStockDatasList.stream()
-                .collect(Collectors.toMap(
-                        dailyStockData -> dailyStockData.getStockValue().getId(),
-                        dailyStockData -> dailyStockData));
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public List<StockOrder> getStockOrders() {
-        return stockOrders;
-    }
-
-    public void setStockOrders(List<StockOrder> stockOrders) {
-        this.stockOrders = stockOrders;
     }
 
     public List<LocalDateTime> getMoveScheduleTimes() {
@@ -120,7 +67,7 @@ public class HistoricalGameRunner {
         this.moveScheduleTimes = moveTimes;
     }
 
-    public boolean complated() {
+    public boolean isFinished() {
         return moveScheduleTimes.isEmpty();
     }
 

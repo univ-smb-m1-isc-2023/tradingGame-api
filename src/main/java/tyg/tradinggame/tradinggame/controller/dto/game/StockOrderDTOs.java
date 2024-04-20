@@ -14,7 +14,7 @@ public class StockOrderDTOs {
 
         public static record StockOrderBasicAttributesInDTO(
                         @NotNull(message = "Order Type is mandatory") OrderTypeEnum type,
-                        @NotNull(message = "Price is mandatory") @Min(value = 0, message = "Price must be positive") double price,
+                        @Min(value = 0, message = "Price must be positive or null") double price,
                         @NotNull(message = "Quantity is mandatory") @Min(value = 1, message = "Quantity must be positive") Long quantity,
                         LocalDate expirationGameDate,
                         @NotNull(message = "The wallet id is mandatory") Long walletId,
