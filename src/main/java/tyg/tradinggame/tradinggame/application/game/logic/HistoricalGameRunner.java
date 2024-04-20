@@ -54,6 +54,9 @@ public class HistoricalGameRunner extends GameRunner {
             moveScheduleTimes.remove(0);
             moveDates.remove(0);
             System.err.println("Game date: " + game.getCurrentGameDate());
+            if (moveDates.isEmpty()) {
+                return;
+            }
             gameLogicService.setGameDate(game, moveDates.get(0));
             System.err.println("Game date: " + game.getCurrentGameDate());
         }
