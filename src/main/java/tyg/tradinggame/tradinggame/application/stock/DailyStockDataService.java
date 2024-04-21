@@ -152,4 +152,12 @@ public class DailyStockDataService {
             LocalDate date,
             StockValue stockValue) {
     }
+
+    public List<DailyStockData> getAllByDate(LocalDate currentGameDate) {
+        return dailyStockDataRepository.findByDate(currentGameDate);
+    }
+
+    public List<DailyStockData> getAllByDateAndStockValue(LocalDate currentGameDate, StockValue stockValue) {
+        return dailyStockDataRepository.findByDateAndStockValue(currentGameDate, stockValue);
+    }
 }

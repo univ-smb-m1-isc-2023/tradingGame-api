@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tyg.tradinggame.tradinggame.application.game.GameService;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForGame;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,4 +57,11 @@ public class GameController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/game/{id}/stock")
+    public List<StockValueOutDTOForGame> allStockValues(@PathVariable Long id) {
+        System.err.println("Getting all stock values");
+        return gameService.getGameStockValuesByGameId(id);
+    }
+
 }

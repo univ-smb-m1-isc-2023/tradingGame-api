@@ -1,11 +1,14 @@
 package tyg.tradinggame.tradinggame.application.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForGame;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.StockOrder;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.WalletRepository;
@@ -61,16 +64,39 @@ public class WalletComputationService {
         for (StockValue stockValue : stockValues) {
             Long boughtStocks = walletRepository.countBoughtStocksOfAValue(wallet, stockValue);
             Long soldStocks = walletRepository.countSoldStocksOfAValue(wallet, stockValue);
+
+            long boughtStocksSum = boughtStocks != null ? boughtStocks.longValue() : 0;
+            long soldStocksSum = soldStocks != null ? soldStocks.longValue() : 0;
+
             List<DailyStockData> dailyStockDatas = dailyStockDataRepository
                     .findByDateAndStockValue(wallet.getGame().getCurrentGameDate(), stockValue);
             if (dailyStockDatas.isEmpty()) {
                 continue;
             }
             double stockValuePrice = dailyStockDatas.get(0).getClose();
-            stockAssetSum += (boughtStocks - soldStocks) * stockValuePrice;
+            stockAssetSum += (boughtStocksSum - soldStocksSum) * stockValuePrice;
         }
 
         return assetResult + stockAssetSum;
+
     }
 
+    public Map<StockValue, Long> getStockValuesWithQuantities(Wallet wallet) {
+        Map<StockValue, Long> stockValueQuantities = new HashMap<>();
+
+        List<StockValue> stockValues = stockValueRepository.findAll();
+
+        for (StockValue stockValue : stockValues) {
+            Long boughtStocks = walletRepository.countBoughtStocksOfAValue(wallet, stockValue);
+            Long soldStocks = walletRepository.countSoldStocksOfAValue(wallet, stockValue);
+
+            long boughtStocksSum = boughtStocks != null ? boughtStocks.longValue() : 0;
+            long soldStocksSum = soldStocks != null ? soldStocks.longValue() : 0;
+
+            long quantity = boughtStocksSum - soldStocksSum;
+
+            stockValueQuantities.put(stockValue, quantity);
+        }
+        return stockValueQuantities;
+    }
 }

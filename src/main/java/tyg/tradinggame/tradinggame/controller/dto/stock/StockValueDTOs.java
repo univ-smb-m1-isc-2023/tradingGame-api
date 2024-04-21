@@ -6,4 +6,17 @@ public class StockValueDTOs {
             String symbol,
             String lastRefreshed) {
     }
+
+    public static record StockValueOutDTOForGame(
+            Long id,
+            String symbol,
+            double price) {
+    }
+
+    public static record StockValueOutDTOForOwner(
+            Long id,
+            String symbol,
+            double price,
+            Long quantity) {
+    }
 }

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 
 import tyg.tradinggame.tradinggame.application.game.GameComputationService;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForGame;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 
 @Component
 public class GameMapper {
@@ -40,4 +42,5 @@ public class GameMapper {
     public List<GameOutDTO> toOutDTOList(List<Game> createdGames) {
         return createdGames.stream().map(game -> toOutDTO(game)).collect(Collectors.toList());
     }
+
 }

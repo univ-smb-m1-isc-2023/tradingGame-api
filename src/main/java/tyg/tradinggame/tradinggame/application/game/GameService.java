@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import tyg.tradinggame.tradinggame.application.exceptions.PublicIllegalArgumentException;
+import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.GameDTOs.GameOutDTO;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForGame;
 import tyg.tradinggame.tradinggame.controller.mappers.game.GameMapper;
+import tyg.tradinggame.tradinggame.controller.mappers.game.StockValueMapper;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Game;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.GameRepository;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Player;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.Wallet;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.GameTypeEnum;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 
 @Service
 public class GameService {
@@ -24,16 +28,22 @@ public class GameService {
     private final GameRepository gameRepository;
     private final PlayerService playerService;
     private final WalletService walletService;
+    private final DailyStockDataService dailyStockDataService;
     private final GameMapper gameMapper;
+    private final StockValueMapper stockValueMapper;
 
     public GameService(GameRepository gameRepository,
             PlayerService playerService,
             WalletService walletService,
-            GameMapper gameMapper) {
+            DailyStockDataService dailyStockDataService,
+            GameMapper gameMapper,
+            StockValueMapper stockValueMapper) {
         this.gameRepository = gameRepository;
         this.playerService = playerService;
         this.walletService = walletService;
+        this.dailyStockDataService = dailyStockDataService;
         this.gameMapper = gameMapper;
+        this.stockValueMapper = stockValueMapper;
     }
 
     @Transactional
@@ -112,6 +122,12 @@ public class GameService {
     public GameOutDTO getById(Long id) {
         Game game = getGameById(id);
         return gameMapper.toOutDTO(game);
+    }
+
+    public List<StockValueOutDTOForGame> getGameStockValuesByGameId(Long id) {
+        Game game = getGameById(id);
+        List<DailyStockData> dailyStockDatas = dailyStockDataService.getAllByDate(game.getCurrentGameDate());
+        return stockValueMapper.toOutDTOsForGame(dailyStockDatas);
     }
 
 }

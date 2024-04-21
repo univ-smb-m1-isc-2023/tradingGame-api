@@ -1,5 +1,7 @@
 package tyg.tradinggame.tradinggame.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import tyg.tradinggame.tradinggame.application.game.WalletService;
 import tyg.tradinggame.tradinggame.controller.dto.game.StockOrderDTOs.StockOrderBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.controller.dto.game.WalletDTOs.WalletOutDTOForOwner;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOwner;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,4 +36,10 @@ public class WalletController {
         WalletOutDTOForOwner walletOutDTOForOwner = walletService.createStockOrder(stockOrderInDTO);
         return walletOutDTOForOwner;
     }
+
+    @GetMapping("/wallet/{id}/stock_value")
+    public List<StockValueOutDTOForOwner> getStockValue(@PathVariable Long id) {
+        return walletService.getAllStockValuesByWalletId(id);
+    }
+
 }
