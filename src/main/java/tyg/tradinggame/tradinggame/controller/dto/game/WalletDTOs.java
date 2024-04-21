@@ -10,6 +10,7 @@ public class WalletDTOs {
                         Long ownerId,
                         String ownerUsername,
                         double balance,
+                        double totalAssets,
                         double lastMonthProfit,
                         double lastYearProfit) {
         }
@@ -19,6 +20,7 @@ public class WalletDTOs {
                         Long gameId,
                         double balance,
                         double availableBalance,
+                        double totalAssets,
                         double lastMonthProfit,
                         double lastYearProfit,
                         List<StockOrderOutDTO> stockOrders) {

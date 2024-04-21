@@ -31,4 +31,6 @@ public interface DailyStockDataRepository extends JpaRepository<DailyStockData, 
                         @Param("endDate") LocalDate endDate);
 
         List<DailyStockData> findByDate(LocalDate date);
+
+        List<DailyStockData> findByDateAndStockValue(LocalDate date, StockValue stockValue);
 }

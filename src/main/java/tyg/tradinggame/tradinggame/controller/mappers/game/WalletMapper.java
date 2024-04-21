@@ -27,6 +27,7 @@ public class WalletMapper {
                 wallet.getGame().getId(),
                 wallet.getBalance(),
                 walletComputationService.availableBalance(wallet),
+                walletComputationService.totalAssets(wallet),
                 wallet.getLastMonthProfit(),
                 wallet.getLastYearProfit(),
                 stockOrderMapper.toOutDTOList(wallet.getStockOrders()));
@@ -41,6 +42,7 @@ public class WalletMapper {
                 wallet.getOwner().getId(),
                 wallet.getOwner().getUsername(),
                 wallet.getBalance(),
+                walletComputationService.totalAssets(wallet),
                 wallet.getLastMonthProfit(),
                 wallet.getLastYearProfit());
     }
