@@ -61,8 +61,12 @@ public class WalletComputationService {
         for (StockValue stockValue : stockValues) {
             Long boughtStocks = walletRepository.countBoughtStocksOfAValue(wallet, stockValue);
             Long soldStocks = walletRepository.countSoldStocksOfAValue(wallet, stockValue);
-            double stockValuePrice = dailyStockDataRepository
-                    .findByDateAndStockValue(wallet.getGame().getCurrentGameDate(), stockValue).get(0).getClose();
+            List<DailyStockData> dailyStockDatas = dailyStockDataRepository
+                    .findByDateAndStockValue(wallet.getGame().getCurrentGameDate(), stockValue);
+            if (dailyStockDatas.isEmpty()) {
+                continue;
+            }
+            double stockValuePrice = dailyStockDatas.get(0).getClose();
             stockAssetSum += (boughtStocks - soldStocks) * stockValuePrice;
         }
 
