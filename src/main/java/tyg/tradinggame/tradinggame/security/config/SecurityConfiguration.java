@@ -28,8 +28,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                                .requestMatchers("/**").permitAll() // Autorisation pour /auth/**
+                                .requestMatchers("/auth/**").permitAll() // Autorisation pour /auth/**
                                 .requestMatchers("/game/**").permitAll() // Autorisation pour /game/**
+                                .requestMatchers("/game").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

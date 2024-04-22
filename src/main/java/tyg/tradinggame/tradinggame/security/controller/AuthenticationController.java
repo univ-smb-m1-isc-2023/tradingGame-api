@@ -7,7 +7,7 @@ import tyg.tradinggame.tradinggame.security.dao.response.JwtAuthenticationRespon
 import tyg.tradinggame.tradinggame.security.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

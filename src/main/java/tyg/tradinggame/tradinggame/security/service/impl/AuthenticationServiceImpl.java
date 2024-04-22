@@ -26,7 +26,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        var userId = user.getId();
+        return JwtAuthenticationResponse.builder()
+                .token(jwt)
+                .userId(userId)
+                .build();
     }
 
     @Override
@@ -36,7 +40,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByUsername(request.getUserName())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid username or password."));
         var jwt = jwtService.generateToken(user);
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        var userId = user.getId();
+        return JwtAuthenticationResponse.builder()
+                .token(jwt)
+                .userId(userId)
+                .build();
     }
 
     @Override
