@@ -86,20 +86,25 @@ public class GameScheduler {
         updateHistoricalGameRunners();
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(fixedDelay = 60000)
     @Transactional
     public void advanceLiveGames() {
+
         System.err.println("Advancing live games");
-        dailyStockDataApiClient.update();
-        Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
-        while (iterator.hasNext()) {
-            LiveGameRunner gameRunner = iterator.next();
-            gameRunner.move();
-            if (gameRunner.isFinished()) {
-                iterator.remove();
+        boolean newDataFetched = dailyStockDataApiClient.update();
+        if (newDataFetched) {
+            System.err.println("New data fetched");
+            System.err.println("Advancing live games");
+            Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
+            while (iterator.hasNext()) {
+                LiveGameRunner gameRunner = iterator.next();
+                gameRunner.move();
+                if (gameRunner.isFinished()) {
+                    iterator.remove();
+                }
             }
+            updateLiveGameRunners();
         }
-        updateLiveGameRunners();
     }
 
 }

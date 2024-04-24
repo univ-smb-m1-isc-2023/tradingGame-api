@@ -1,5 +1,6 @@
 package tyg.tradinggame.tradinggame.application.stock;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class StockValueService {
             existingStockValue.setLastRefreshed(stackValueDTO.lastRefreshed);
             existingStockValue.setOutputSize(stackValueDTO.outputSize);
             existingStockValue.setTimeZone(stackValueDTO.timeZone);
+            existingStockValue.setLastFetched(LocalDateTime.now());
             return stockValueRepository.save(existingStockValue);
         } else {
             StockValue stockValue = new StockValue(

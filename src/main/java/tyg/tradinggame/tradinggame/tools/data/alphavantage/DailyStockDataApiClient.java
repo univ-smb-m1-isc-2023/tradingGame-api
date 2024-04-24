@@ -4,8 +4,13 @@ import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.application.stock.StockValueService;
 import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService.DailyStockDataBasicAttributesInDTO;
 import tyg.tradinggame.tradinggame.application.stock.StockValueService.StockValueInDTO;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -92,21 +97,24 @@ public class DailyStockDataApiClient {
     }
 
     @Transactional
-    public void update() {
+    public boolean update() {
 
         boolean fetched = false;
 
-        List<String> presentSymbols = stockValueService.getAllStockValues().stream().map(StockValue::getSymbol)
-                .toList();
-        for (String string : presentSymbols) {
-
-            fetchLastData(string);
-            fetched = true;
+        List<StockValue> presentStockValues = stockValueService.getAllStockValues();
+        for (StockValue stockValue : presentStockValues) {
+            if (stockValue.getLastFetched().isBefore(LocalDateTime.now().minus(1, ChronoUnit.DAYS))) {
+                if (fetchLastData(stockValue.getSymbol())) {
+                    fetched = true;
+                }
+            }
         }
 
         if (fetched) {
             System.out.println("Fetched new data from AlphaVantage");
         }
+
+        return fetched;
 
     }
 
@@ -116,7 +124,7 @@ public class DailyStockDataApiClient {
     }
 
     @Transactional
-    public void fetchLastData(String symbol) {
+    public boolean fetchLastData(String symbol) {
         String apiUrl = buildUrl(API_DOMAIN, API_KEY, symbol, "compact");
 
         System.err.println("Fetching data from: " + apiUrl);
@@ -143,7 +151,7 @@ public class DailyStockDataApiClient {
             } catch (JsonProcessingException e) {
                 System.out.println("While parsing: " + responseBody);
                 e.printStackTrace();
-                return;
+                return false;
             }
 
             JSONObject jsonObject = new JSONObject(responseBodyJson);
@@ -173,9 +181,10 @@ public class DailyStockDataApiClient {
 
             System.err.println(
                     "Fetched data for: " + symbol + " date: " + latestDailyStockDataBasicAttributesInDTO.date());
-
+            return true;
         } else {
             System.err.println("Error: " + response.getStatusCode());
+            return false;
         }
     }
 
