@@ -13,6 +13,8 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,6 +30,8 @@ public class StockValue {
     private String symbol;
 
     private String lastRefreshed;
+
+    private LocalDateTime lastFetched;
     private String outputSize;
     private String timeZone;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "stockValue")
@@ -38,6 +42,7 @@ public class StockValue {
         this.information = information;
         this.symbol = symbol;
         this.lastRefreshed = lastRefreshed;
+        this.lastFetched = LocalDateTime.now();
         this.outputSize = outputSize;
         this.timeZone = timeZone;
     }
@@ -51,6 +56,17 @@ public class StockValue {
 
     public void setInformation(String information) {
         this.information = information;
+    }
+
+    public LocalDateTime getLastFetched() {
+        if (lastFetched == null) {
+            return LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC);
+        }
+        return lastFetched;
+    }
+
+    public void setLastFetched(LocalDateTime lastFetched) {
+        this.lastFetched = lastFetched;
     }
 
     public String getSymbol() {
