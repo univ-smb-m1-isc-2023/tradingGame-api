@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                                 .requestMatchers("/auth/**").permitAll() // Autorisation pour /auth/**
                                 .requestMatchers("/game/**").permitAll() // Autorisation pour /game/**
-                                .requestMatchers("/game").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
