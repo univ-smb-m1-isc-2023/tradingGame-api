@@ -24,14 +24,16 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                                .requestMatchers("/auth/**").permitAll() // Autorisation pour /auth/**
-                                .requestMatchers("/game/**").permitAll() // Autorisation pour /game/**
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().authenticated())
+                        .requestMatchers("/auth/**").permitAll() // Autorisation pour /auth/**
+                        .requestMatchers("/game/**").permitAll() // Autorisation pour /game/**
+                        .requestMatchers("/game").permitAll()
+                        .requestMatchers("/timestats").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
