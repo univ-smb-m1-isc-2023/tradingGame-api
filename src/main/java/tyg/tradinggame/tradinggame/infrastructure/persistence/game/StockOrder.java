@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Index;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.game.enums.OrderTypeEnum;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import jakarta.persistence.ManyToOne;
@@ -17,7 +18,12 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "stock_order")
+@Table(name = "stock_order", indexes = {
+        @Index(name = "index_wallet", columnList = "wallet_id"),
+        @Index(name = "index_stockValue", columnList = "stockValue_id"),
+        @Index(name = "index_type", columnList = "type"),
+        @Index(name = "index_executed", columnList = "executed")
+})
 public class StockOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
