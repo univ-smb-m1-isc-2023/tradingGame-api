@@ -18,12 +18,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "stock_order", indexes = {
-        @Index(name = "index_wallet", columnList = "wallet_id"),
-        @Index(name = "index_stockValue", columnList = "stockValue_id"),
-        @Index(name = "index_type", columnList = "type"),
-        @Index(name = "index_executed", columnList = "executed")
-})
+@Table(name = "stock_order")
 public class StockOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
