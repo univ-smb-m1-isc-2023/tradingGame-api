@@ -92,8 +92,12 @@ public class GameLogicService {
         return dailyStockDataRepository.findByDate(game.getCurrentGameDate());
     }
 
-    public List<StockOrder> getPendingStockOrders(Game game) {
-        return stockOrderRepository.findPendingOrdersForGame(game);
+    public List<StockOrder> getPendingStockOrdersForHistorical(Game game) {
+        return stockOrderRepository.findPendingOrdersForHistoricalGame(game);
+    }
+
+    public List<StockOrder> getPendingStockOrdersForLive(Game game) {
+        return stockOrderRepository.findPendingOrdersForLiveGame(game);
     }
 
     public void persistStockOrderUpdate(StockOrder stockOrder) {

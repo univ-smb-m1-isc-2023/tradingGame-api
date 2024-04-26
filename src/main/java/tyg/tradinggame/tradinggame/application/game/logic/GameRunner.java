@@ -50,8 +50,12 @@ public class GameRunner {
                         dailyStockData -> dailyStockData));
     }
 
-    protected void updateStockOrders() {
-        this.stockOrders = gameLogicService.getPendingStockOrders(game);
+    protected void updateStockOrdersForHistorical() {
+        this.stockOrders = gameLogicService.getPendingStockOrdersForHistorical(game);
+    }
+
+    protected void updateStockOrdersForLive() {
+        this.stockOrders = gameLogicService.getPendingStockOrdersForLive(game);
     }
 
     public Game getGame() {

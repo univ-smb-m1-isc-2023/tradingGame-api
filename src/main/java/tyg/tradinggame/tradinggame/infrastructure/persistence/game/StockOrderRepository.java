@@ -11,6 +11,9 @@ import java.util.List;
 public interface StockOrderRepository extends JpaRepository<StockOrder, Long> {
 
     @Query("SELECT so FROM StockOrder so WHERE so.wallet.game = :game AND so.wallet.game.currentGameDate <= so.expirationGameDate AND so.cancelled = false AND so.executed = false ORDER BY so.creationGameDate ASC")
-    List<StockOrder> findPendingOrdersForGame(@Param("game") Game game);
+    List<StockOrder> findPendingOrdersForHistoricalGame(@Param("game") Game game);
+
+    @Query("SELECT so FROM StockOrder so WHERE so.wallet.game = :game AND so.wallet.game.currentGameDate <= so.expirationGameDate AND so.creationGameDate < so.wallet.game.currentGameDate AND so.cancelled = false AND so.executed = false ORDER BY so.creationGameDate ASC")
+    List<StockOrder> findPendingOrdersForLiveGame(@Param("game") Game game);
 
 }

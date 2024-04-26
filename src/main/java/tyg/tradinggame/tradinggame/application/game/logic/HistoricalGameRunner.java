@@ -40,7 +40,7 @@ public class HistoricalGameRunner extends GameRunner {
             return;
         }
         if (moveScheduleTimes.get(0).isBefore(LocalDateTime.now())) {
-            updateStockOrders();
+            updateStockOrdersForHistorical();
             updateDailyStockDatas();
             Iterator<StockOrder> iterator = stockOrders.iterator();
             while (iterator.hasNext()) {

@@ -17,7 +17,7 @@ public class LiveGameRunner extends GameRunner {
 
     public void move() {
         gameLogicService.setGameDate(game, LocalDate.now());
-        updateStockOrders();
+        updateStockOrdersForLive();
         updateDailyStockDatas();
         if (stockOrders == null) {
             return;
