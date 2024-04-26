@@ -17,9 +17,9 @@ import tyg.tradinggame.tradinggame.controller.TradingGameController;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+@EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
 @SpringBootTest
 @AutoConfigureMockMvc
-@EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
 public class TradingGameApplicationTests {
 
     @Autowired

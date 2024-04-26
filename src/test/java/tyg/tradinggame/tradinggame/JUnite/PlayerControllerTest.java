@@ -27,8 +27,8 @@ import java.util.Collections;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
 @EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
+@RunWith(MockitoJUnitRunner.class)
 public class PlayerControllerTest {
 
     @Mock

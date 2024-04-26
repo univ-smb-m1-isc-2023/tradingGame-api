@@ -17,8 +17,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
+@SpringBootTest
 public class UserServiceImplTest {
 
     @Mock
