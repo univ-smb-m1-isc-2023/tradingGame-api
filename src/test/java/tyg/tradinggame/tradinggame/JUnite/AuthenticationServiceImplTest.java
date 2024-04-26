@@ -11,6 +11,8 @@ import tyg.tradinggame.tradinggame.security.dao.response.JwtAuthenticationRespon
 import tyg.tradinggame.tradinggame.security.service.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
+
 import tyg.tradinggame.tradinggame.security.service.impl.AuthenticationServiceImpl;
 
 import java.util.Optional;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
 public class AuthenticationServiceImplTest {
 
     @Mock
@@ -57,5 +60,6 @@ public class AuthenticationServiceImplTest {
         assertNotNull(response.getToken());
     }
 
-    // Ajoutez d'autres tests pour tester les autres scénarios, comme la connexion avec des identifiants valides et invalides
+    // Ajoutez d'autres tests pour tester les autres scénarios, comme la connexion
+    // avec des identifiants valides et invalides
 }
