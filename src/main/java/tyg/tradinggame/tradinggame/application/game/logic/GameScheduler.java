@@ -86,10 +86,9 @@ public class GameScheduler {
         updateHistoricalGameRunners();
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 600000) // 10 minutes
     @Transactional
     public void advanceLiveGames() {
-
         System.err.println("Advancing live games");
         boolean newDataFetched = dailyStockDataApiClient.update();
         if (newDataFetched) {

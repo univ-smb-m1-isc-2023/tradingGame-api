@@ -103,9 +103,11 @@ public class DailyStockDataApiClient {
 
         List<StockValue> presentStockValues = stockValueService.getAllStockValues();
         for (StockValue stockValue : presentStockValues) {
-            if (stockValue.getLastFetched().isBefore(LocalDateTime.now().minus(1, ChronoUnit.DAYS))) {
+            if (stockValue.getLastFetched().isBefore(LocalDateTime.now().minus(3, ChronoUnit.HOURS))) {
                 if (fetchLastData(stockValue.getSymbol())) {
                     fetched = true;
+                } else {
+                    return false;
                 }
             }
         }
@@ -158,6 +160,13 @@ public class DailyStockDataApiClient {
 
             JSONObject metaData = jsonObject.getJSONObject(metaDataKey);
             StockValueInDTO stockValueDTO = ResponseParser.toStockValueModel(metaData);
+
+            String lastRefreshedDB = stockValueService.getStockValueBySymbol(symbol).getLastRefreshed();
+            String lastRefreshedAPI = stockValueDTO.lastRefreshed();
+            if (lastRefreshedDB.equals(lastRefreshedAPI)) {
+                System.err.println("No new data for: " + symbol);
+                return false;
+            }
 
             StockValue stockValue = stockValueService.createOrUpdateStockValue(stockValueDTO);
 

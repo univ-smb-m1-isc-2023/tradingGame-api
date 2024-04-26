@@ -58,4 +58,8 @@ public class StockValueService {
     public List<StockValue> getAllStockValues() {
         return stockValueRepository.findAll();
     }
+
+    public StockValue getStockValueBySymbol(String symbol) {
+        return stockValueRepository.findBySymbol(symbol);
+    }
 }
