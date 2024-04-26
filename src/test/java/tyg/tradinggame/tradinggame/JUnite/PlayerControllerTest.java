@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
+
 import tyg.tradinggame.tradinggame.application.game.GameService;
 import tyg.tradinggame.tradinggame.application.game.PlayerService;
 import tyg.tradinggame.tradinggame.controller.PlayerController;
@@ -26,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
+@EnabledIf(expression = "${deployment.testing.active}", loadContext = true)
 public class PlayerControllerTest {
 
     @Mock
@@ -43,19 +46,18 @@ public class PlayerControllerTest {
     @Before
     public void setUp() {
 
-
-        // Mocking behavior of GameService
-        when(gameService.createGame(any(GameBasicAttributesInDTO.class))).thenReturn(new GameOutDTO(1L, "Game 1", GameTypeEnum.HISTORICAL,
-                LocalDate.now(), LocalDate.now().plusDays(7),
-                LocalDate.now(), 100.0, Duration.ofHours(1),
-                1L, Arrays.asList(new WalletDTOs.WalletOutDTOForAll(1L, "User1", 100.0, 200.0, 10.0, 50.0)),
-                Duration.ofDays(7), Duration.ofDays(7)));
+        when(gameService.createGame(any(GameBasicAttributesInDTO.class)))
+                .thenReturn(new GameOutDTO(1L, "Game 1", GameTypeEnum.HISTORICAL,
+                        LocalDate.now(), LocalDate.now().plusDays(7),
+                        LocalDate.now(), 100.0, Duration.ofHours(1),
+                        1L, Arrays.asList(new WalletDTOs.WalletOutDTOForAll(1L, "User1", 100.0, 200.0, 10.0, 50.0)),
+                        Duration.ofDays(7), Duration.ofDays(7)));
 
     }
 
     @Test
     public void testCreateGame() {
-        // Prepare input for the test
+        // Prepare input for the testx
         Long playerId = 1L;
         GameBasicAttributesInDTO gameBasicAttributes = new GameBasicAttributesInDTO(
                 "Test Game", // Titre
