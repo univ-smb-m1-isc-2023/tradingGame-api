@@ -110,4 +110,5 @@ public class GameLogicService {
         game.setLoaded(true);
         gameRepository.save(game);
     }
+
 }

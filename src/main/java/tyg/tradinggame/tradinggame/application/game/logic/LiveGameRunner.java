@@ -16,6 +16,7 @@ public class LiveGameRunner extends GameRunner {
     }
 
     public void move() {
+        gameLogicService.setGameDate(game, LocalDate.now());
         updateStockOrders();
         updateDailyStockDatas();
         if (stockOrders == null) {
@@ -32,7 +33,6 @@ public class LiveGameRunner extends GameRunner {
                 iterator.remove();
             }
         }
-        gameLogicService.setGameDate(game, LocalDate.now());
     }
 
     public boolean isFinished() {
