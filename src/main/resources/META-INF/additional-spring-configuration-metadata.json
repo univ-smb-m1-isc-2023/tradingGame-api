@@ -7,4 +7,9 @@
   "name": "data.dailystock.api.domain",
   "type": "java.lang.String",
   "description": "Full domain name for the DailyStock API"
+},
+{
+  "name": "deployment.testing.active",
+  "type": "java.lang.Boolean",
+  "description": "Flag to indicate whether to perform deployment testing or not"
 }]}
