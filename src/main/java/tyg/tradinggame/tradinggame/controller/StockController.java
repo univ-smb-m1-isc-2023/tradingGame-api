@@ -75,7 +75,7 @@ public class StockController {
     }
 
     @GetMapping("/stock_value")
-    public List<StockValue> getStockValue() {
-        return stockValueService.getAllStockValues();
+    public List<StockValueOutDTOForOverview> getStockValue() {
+        return stockValueService.getAll();
     }
 }

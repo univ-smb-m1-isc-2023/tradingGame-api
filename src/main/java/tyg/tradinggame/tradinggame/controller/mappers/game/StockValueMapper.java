@@ -16,7 +16,8 @@ public class StockValueMapper {
         return new StockValueOutDTOForOverview(
                 stockValue.getId(),
                 stockValue.getSymbol(),
-                stockValue.getLastRefreshed());
+                stockValue.getLastRefreshed(),
+                stockValue.getLastFetched());
     }
 
     public StockValueOutDTOForGame toOutDTOForGame(DailyStockData dailyStockData) {
