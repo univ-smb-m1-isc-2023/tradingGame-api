@@ -89,21 +89,21 @@ public class GameScheduler {
     @Scheduled(fixedDelay = 600000) // 10 minutes
     @Transactional
     public void advanceLiveGames() {
-        System.err.println("Advancing live games");
+        System.err.println("Running live game update");
         boolean newDataFetched = dailyStockDataApiClient.update();
-        if (newDataFetched) {
-            System.err.println("New data fetched");
-            System.err.println("Advancing live games");
-            Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
-            while (iterator.hasNext()) {
-                LiveGameRunner gameRunner = iterator.next();
-                gameRunner.move();
-                if (gameRunner.isFinished()) {
-                    iterator.remove();
-                }
+        // if (newDataFetched) {
+        // System.err.println("New data fetched");
+        System.err.println("Advancing live games");
+        Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
+        while (iterator.hasNext()) {
+            LiveGameRunner gameRunner = iterator.next();
+            gameRunner.move();
+            if (gameRunner.isFinished()) {
+                iterator.remove();
             }
-            updateLiveGameRunners();
         }
+        updateLiveGameRunners();
+        // }
     }
 
 }

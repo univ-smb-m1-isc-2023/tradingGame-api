@@ -18,8 +18,11 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("SELECT g FROM Game g WHERE g.currentGameDate < g.finalGameDate")
     List<Game> findUnfinshedGames();
 
-    @Query("SELECT g FROM Game g WHERE g.currentGameDate < g.finalGameDate AND g.type = :gameType")
+    @Query("SELECT g FROM Game g WHERE g.currentGameDate <= g.finalGameDate AND g.type = :gameType")
     List<Game> findUnfinshedGamesByType(@Param("gameType") GameTypeEnum gameType);
+
+    @Query("SELECT g FROM Game g WHERE g.type = :gameType")
+    List<Game> findGamesByType(@Param("gameType") GameTypeEnum gameType);
 
     @Query("SELECT g FROM Game g WHERE g.currentGameDate < g.finalGameDate AND g.type = :gameType AND g.isLoaded = false")
     List<Game> findUnfinshedNotLoadedGamesByType(@Param("gameType") GameTypeEnum gameType);
