@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import tyg.tradinggame.tradinggame.application.game.WalletService;
 import tyg.tradinggame.tradinggame.application.stock.DailyStockDataService;
 import tyg.tradinggame.tradinggame.application.stock.StockValueService;
 import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOverview;
+import tyg.tradinggame.tradinggame.controller.dto.stock.StockValueDTOs.StockValueOutDTOForOwner;
 import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.DailyStockData;
+import tyg.tradinggame.tradinggame.infrastructure.persistence.stock.StockValue;
 import tyg.tradinggame.tradinggame.tools.data.alphavantage.DailyStockDataApiClient;
 
 import java.util.List;
@@ -24,7 +27,8 @@ public class StockController {
 
     public StockController(DailyStockDataService dailyStockDataService,
             DailyStockDataApiClient dailyStockDataApiClient,
-            StockValueService stockValueService) {
+            StockValueService stockValueService,
+            WalletService walletService) {
         this.dailyStockDataService = dailyStockDataService;
         this.dailyStockDataApiClient = dailyStockDataApiClient;
         this.stockValueService = stockValueService;
@@ -68,5 +72,10 @@ public class StockController {
         dailyStockDataApiClient.fetchAllData(symbol);
 
         return ResponseEntity.ok("Stock data populated for symbol: " + symbol);
+    }
+
+    @GetMapping("/stock_value")
+    public List<StockValue> getStockValue(@PathVariable Long id) {
+        return stockValueService.getAllStockValues();
     }
 }

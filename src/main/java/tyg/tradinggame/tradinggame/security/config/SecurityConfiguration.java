@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/game/**").permitAll() // Autorisation pour /game/**
                         .requestMatchers("/game").permitAll()
                         .requestMatchers("/timestats").permitAll()
+                        .requestMatchers("/stock_value").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
