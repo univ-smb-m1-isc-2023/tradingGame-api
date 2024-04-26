@@ -39,7 +39,7 @@ public class GameLogicService {
     }
 
     public List<Game> getUnfinishedLiveGames() {
-        return gameRepository.findUnfinshedGamesByType(GameTypeEnum.LIVE);
+        return gameRepository.findGamesByType(GameTypeEnum.LIVE);
     }
 
     public List<Game> getNewUnfinishedHistoricalGames() {

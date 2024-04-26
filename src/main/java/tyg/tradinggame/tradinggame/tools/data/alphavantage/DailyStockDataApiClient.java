@@ -163,8 +163,12 @@ public class DailyStockDataApiClient {
 
             String lastRefreshedDB = stockValueService.getStockValueBySymbol(symbol).getLastRefreshed();
             String lastRefreshedAPI = stockValueDTO.lastRefreshed();
+
             if (lastRefreshedDB.equals(lastRefreshedAPI)) {
                 System.err.println("No new data for: " + symbol);
+
+                stockValueService.createOrUpdateStockValue(stockValueDTO); // updating the last fetched time
+
                 return false;
             }
 

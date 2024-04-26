@@ -18,6 +18,11 @@ public class LiveGameRunner extends GameRunner {
     public void move() {
         updateStockOrders();
         updateDailyStockDatas();
+        if (stockOrders == null) {
+            return;
+        } else if (stockOrders.isEmpty()) {
+            return;
+        }
         Iterator<StockOrder> iterator = stockOrders.iterator();
         while (iterator.hasNext()) {
             StockOrder stockOrder = iterator.next();

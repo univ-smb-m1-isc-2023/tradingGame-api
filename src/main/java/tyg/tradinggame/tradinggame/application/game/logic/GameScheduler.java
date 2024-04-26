@@ -90,9 +90,9 @@ public class GameScheduler {
     @Transactional
     public void advanceLiveGames() {
         System.err.println("Running live game update");
-        boolean newDataFetched = dailyStockDataApiClient.update();
-        // if (newDataFetched) {
-        // System.err.println("New data fetched");
+        boolean newDataFound = dailyStockDataApiClient.update();
+        // if (newDataFound) {
+        // System.err.println("New data found");
         System.err.println("Advancing live games");
         Iterator<LiveGameRunner> iterator = liveGameRunners.iterator();
         while (iterator.hasNext()) {
